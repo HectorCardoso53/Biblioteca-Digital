@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minha Conta · Biblioteca Digital Pública</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#1E3A8A;--azul-escuro:#172B6E;--azul-medio:#2D52C7;--azul-claro:#3B82F6;--azul-palido:#DBEAFE;--azul-fundo:#EFF6FF;--branco:#FFFFFF;--cinza-claro:#F8FAFC;--cinza-borda:#E2E8F0;--cinza-texto:#64748B;--cinza-escuro:#334155;--texto:#0F172A;--verde:#059669;--laranja:#D97706;--vermelho:#DC2626;--sombra:0 4px 16px rgba(30,58,138,0.1);--r:10px;--fonte-d:'Playfair Display',Georgia,serif;--fonte-c:'IBM Plex Sans',system-ui,sans-serif;--t:0.22s cubic-bezier(0.4,0,0.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fonte-c);background:var(--cinza-claro);color:var(--texto);min-height:100vh;display:flex;flex-direction:column}
+main{flex:1}
+a{color:var(--azul);text-decoration:none}
+#navbar{background:#fff;border-bottom:1px solid var(--cinza-borda);position:sticky;top:0;z-index:500;box-shadow:0 1px 8px rgba(30,58,138,.07)}
+.nav-inner{display:flex;align-items:center;gap:20px;height:64px;max-width:1200px;margin:0 auto;padding:0 24px}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo{width:38px;height:38px;background:var(--azul);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.brand-name{display:block;font-weight:700;font-size:.95rem;color:var(--azul);line-height:1.2}
+.brand-sub{display:block;font-size:.7rem;color:var(--cinza-texto)}
+.nav-links{display:flex;align-items:center;gap:4px;flex:1;margin-left:16px}
+.nav-links a{padding:6px 14px;border-radius:6px;font-size:.875rem;font-weight:500;color:var(--cinza-escuro);transition:all var(--t);text-decoration:none}
+.nav-links a:hover,.nav-links a.active{background:var(--azul-fundo);color:var(--azul)}
+.nav-auth{display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:auto}
+.nav-user{display:flex;align-items:center;gap:8px;text-decoration:none;padding:4px 10px 4px 4px;border-radius:999px;border:1px solid var(--cinza-borda);transition:all var(--t)}
+.nav-user:hover{border-color:var(--azul);background:var(--azul-fundo)}
+.user-av{width:30px;height:30px;background:var(--azul);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:700}
+.user-nm{font-size:.85rem;font-weight:500;color:var(--cinza-escuro)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 22px;border-radius:var(--r);font-family:var(--fonte-c);font-size:.9rem;font-weight:500;border:2px solid transparent;cursor:pointer;transition:all var(--t);text-decoration:none;white-space:nowrap}
+.btn-primary{background:var(--azul);color:#fff;border-color:var(--azul)}
+.btn-primary:hover{background:var(--azul-escuro);color:#fff;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--cinza-escuro);border-color:var(--cinza-borda)}
+.btn-ghost:hover{background:var(--cinza-claro)}
+.btn-danger{background:var(--vermelho);color:#fff;border-color:var(--vermelho)}
+.btn-danger:hover{background:#B91C1C;color:#fff}
+.btn-sm{padding:6px 14px;font-size:.82rem;border-radius:6px}
+.container{max-width:1000px;margin:0 auto;padding:0 24px}
+.conta-hero{background:linear-gradient(135deg,var(--azul),var(--azul-medio));color:#fff;padding:40px 0}
+.conta-perfil{display:flex;align-items:center;gap:20px}
+.avatar-g{width:72px;height:72px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;flex-shrink:0;border:3px solid rgba(255,255,255,.3)}
+.conta-nome-h{font-family:var(--fonte-d);font-size:1.8rem;margin-bottom:4px}
+.conta-email-h{opacity:.8;font-size:.9rem;margin-bottom:8px}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:.75rem;font-weight:600}
+.badge-blue{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.badge-green{background:#D1FAE5;color:#065F46}
+.badge-orange{background:#FEF3C7;color:#92400E}
+.badge-red{background:#FEE2E2;color:#991B1B}
+.badge-gray{background:#F1F5F9;color:#475569}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0}
+.stat-mini{background:#fff;border:1px solid var(--cinza-borda);border-radius:var(--r);padding:20px;text-align:center}
+.stat-mini-val{font-family:var(--fonte-d);font-size:2rem;color:var(--azul);line-height:1}
+.stat-mini-label{font-size:.82rem;color:var(--cinza-texto);margin-top:4px}
+.card{background:#fff;border:1px solid var(--cinza-borda);border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:var(--sombra)}
+.card-title{font-family:var(--fonte-d);color:var(--azul);font-size:1.2rem;margin-bottom:20px}
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--cinza-borda)}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--azul-fundo)}
+th{padding:11px 16px;text-align:left;font-size:.78rem;font-weight:600;color:var(--azul);text-transform:uppercase;letter-spacing:.05em}
+td{padding:12px 16px;font-size:.875rem;border-top:1px solid var(--cinza-borda)}
+tr:hover td{background:var(--cinza-claro)}
+.empty-state{text-align:center;padding:40px 24px;color:var(--cinza-texto)}
+.empty-icon{font-size:2.5rem;margin-bottom:10px;opacity:.5}
+.empty-state h3{font-size:1rem;margin-bottom:4px;color:var(--cinza-escuro)}
+#footer{background:var(--azul);color:rgba(255,255,255,.9);padding:24px 0;margin-top:auto}
+.footer-simple{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:.8rem;opacity:.7}
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+.toast{padding:12px 18px;border-radius:var(--r);box-shadow:0 10px 40px rgba(30,58,138,.14);font-size:.875rem;font-weight:500;min-width:260px;animation:toastIn .3s ease;display:flex;align-items:center;gap:10px}
+.toast-success{background:var(--verde);color:#fff}
+.toast-info{background:var(--azul);color:#fff}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@media(max-width:768px){.conta-perfil{flex-direction:column;text-align:center}.stats-row{grid-template-columns:1fr}.nav-links{display:none}}
+</style>
+</head>
+<body>
+<header id="navbar"></header>
+<main>
+  <div class="conta-hero">
+    <div class="container">
+      <div class="conta-perfil">
+        <div class="avatar-g" id="avatar-g"></div>
+        <div>
+          <div class="conta-nome-h" id="conta-nome"></div>
+          <div class="conta-email-h" id="conta-email"></div>
+          <span class="badge badge-blue" id="conta-tipo"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:28px 0">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-mini">
+          <div class="stat-mini-val" id="count-res">0</div>
+          <div class="stat-mini-label">🔖 Livros Reservados</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-val" id="count-emp">0</div>
+          <div class="stat-mini-label">📖 Livros Emprestados</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔖 Livros Reservados</div>
+        <div id="meus-reservados"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📖 Livros em Meu Poder</div>
+        <div id="meus-emprestados"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⚙️ Ações da Conta</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a href="acervo.html" class="btn btn-primary">📚 Explorar Acervo</a>
+          <button class="btn btn-danger" id="logout-btn">Sair da Conta</button>
+        </div>
+        <div style="margin-top:20px;padding:14px;background:var(--azul-fundo);border-radius:var(--r);font-size:.84rem;color:var(--cinza-escuro)">
+          ℹ️ Para reservar, devolver ou gerenciar empréstimos, entre em contato com a biblioteca ou use o acervo online.
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer id="footer"></footer>
+<div id="toast-container"></div>
+
+<script>
+const K={USERS:'bdp_users',BOOKS:'bdp_books',CU:'bdp_currentUser',EXT:'bdp_extLoans'};
+const sg=k=>{try{return JSON.parse(localStorage.getItem(k));}catch{return null;}};
+const ss=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const gid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function getUsers(){return sg(K.USERS)||[];}
+function getUserByEmail(e){return getUsers().find(u=>u.email.toLowerCase()===e.toLowerCase())||null;}
+function getCurrentUser(){return sg(K.CU);}
+function getBooks(){return sg(K.BOOKS)||[];}
+function saveBooks(b){ss(K.BOOKS,b);}
+function fmtDate(iso){if(!iso)return '—';return new Intl.DateTimeFormat('pt-BR').format(new Date(iso));}
+function statusBadge(s){const m={disponivel:'<span class="badge badge-green">Disponível</span>',reservado:'<span class="badge badge-orange">Reservado</span>',emprestado:'<span class="badge badge-red">Emprestado</span>'};return m[s]||`<span class="badge badge-gray">${s}</span>`;}
+function seedIfEmpty(){
+  if(getBooks().length>0)return;
+  if(!getUserByEmail('admin@biblioteca.gov.br')){const u={id:gid(),nome:'Administrador',email:'admin@biblioteca.gov.br',senha:'admin123',tipo:'admin',criadoEm:new Date().toISOString()};ss(K.USERS,[u]);}
+  const livros=[
+    {titulo:'Dom Casmurro',autor:'Machado de Assis',categoria:'Literatura Brasileira',ano:'1899',descricao:'Clássico sobre amor e traição.'},
+    {titulo:'O Pequeno Príncipe',autor:'Antoine de Saint-Exupéry',categoria:'Fábula',ano:'1943',descricao:'Fábula sobre um pequeno príncipe.'},
+    {titulo:'1984',autor:'George Orwell',categoria:'Ficção Científica',ano:'1949',descricao:'Distopia totalitária.'},
+    {titulo:'Sapiens',autor:'Yuval Noah Harari',categoria:'História',ano:'2011',descricao:'Uma breve história da humanidade.'},
+    {titulo:'Grande Sertão: Veredas',autor:'João Guimarães Rosa',categoria:'Literatura Brasileira',ano:'1956',descricao:'Obra-prima brasileira.'},
+    {titulo:'O Hobbit',autor:'J.R.R. Tolkien',categoria:'Fantasia',ano:'1937',descricao:'A aventura de Bilbo.'},
+    {titulo:'Cem Anos de Solidão',autor:'Gabriel García Márquez',categoria:'Romance',ano:'1967',descricao:'A saga dos Buendía.'},
+    {titulo:'A Revolução dos Bichos',autor:'George Orwell',categoria:'Fábula',ano:'1945',descricao:'Alegoria política.'},
+  ];
+  saveBooks(livros.map(l=>({id:gid(),...l,capa:'',status:'disponivel',emprestadoPara:null,dataReserva:null,prazoRetirada:null,dataEmprestimo:null,dataDevolucao:null,criadoEm:new Date().toISOString()})));
+}
+function verificarReservas(){
+  const agora=new Date(),books=getBooks();let ok=false;
+  books.forEach(b=>{if(b.status==='reservado'&&b.prazoRetirada&&agora>new Date(b.prazoRetirada)){b.status='disponivel';b.emprestadoPara=null;b.dataReserva=null;b.prazoRetirada=null;ok=true;}});
+  if(ok)saveBooks(books);
+}
+
+function renderNavbar(u){
+  document.getElementById('navbar').innerHTML=`
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-logo">📚</div>
+        <div><span class="brand-name">Biblioteca Digital</span><span class="brand-sub">Pública Municipal</span></div>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">Início</a>
+        <a href="acervo.html">Acervo</a>
+        <a href="quem-somos.html">Quem Somos</a>
+        ${u.tipo==='admin'?`<a href="admin.html">⚙️ Admin</a>`:''}
+      </nav>
+      <div class="nav-auth">
+        <a href="conta.html" class="nav-user active">
+          <div class="user-av">${u.nome.charAt(0).toUpperCase()}</div>
+          <span class="user-nm">${u.nome.split(' ')[0]}</span>
+        </a>
+        <button class="btn btn-ghost btn-sm" id="logout-nav">Sair</button>
+      </div>
+    </div>`;
+  document.getElementById('logout-nav').onclick=doLogout;
+}
+function doLogout(){localStorage.removeItem(K.CU);window.location.href='index.html';}
+function renderFooter(){
+  const f=document.getElementById('footer');if(!f)return;
+  f.innerHTML=`<div class="footer-simple"><span>© ${new Date().getFullYear()} Biblioteca Digital Pública Municipal.</span></div>`;
+}
+
+function renderLivros(containerId, livros, tipo){
+  const c=document.getElementById(containerId);
+  if(!livros.length){
+    c.innerHTML=`<div class="empty-state"><div class="empty-icon">${tipo==='res'?'🔖':'📖'}</div><h3>Nenhum livro ${tipo==='res'?'reservado':'emprestado'}</h3></div>`;
+    return;
+  }
+  c.innerHTML=`<div class="table-wrap"><table>
+    <thead><tr><th>Livro</th><th>Autor</th><th>Status</th><th>${tipo==='res'?'Prazo de Retirada':'Devolução até'}</th></tr></thead>
+    <tbody>${livros.map(b=>`<tr>
+      <td><strong>${b.titulo}</strong></td>
+      <td>${b.autor}</td>
+      <td>${statusBadge(b.status)}</td>
+      <td><strong>${tipo==='res'?fmtDate(b.prazoRetirada):fmtDate(b.dataDevolucao)}</strong></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+seedIfEmpty();
+verificarReservas();
+
+const u=getCurrentUser();
+if(!u){window.location.href='login.html';}
+else{
+  renderNavbar(u);
+  renderFooter();
+  document.getElementById('avatar-g').textContent=u.nome.charAt(0).toUpperCase();
+  document.getElementById('conta-nome').textContent=u.nome;
+  document.getElementById('conta-email').textContent=u.email;
+  document.getElementById('conta-tipo').textContent=u.tipo==='admin'?'Administrador':'Usuário';
+  const books=getBooks();
+  const res=books.filter(b=>b.status==='reservado'&&b.emprestadoPara===u.id);
+  const emp=books.filter(b=>b.status==='emprestado'&&b.emprestadoPara===u.id);
+  document.getElementById('count-res').textContent=res.length;
+  document.getElementById('count-emp').textContent=emp.length;
+  renderLivros('meus-reservados',res,'res');
+  renderLivros('meus-emprestados',emp,'emp');
+  document.getElementById('logout-btn').onclick=doLogout;
+}
+</script>
+</body>
+</html>

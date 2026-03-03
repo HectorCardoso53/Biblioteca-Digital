@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acervo · Biblioteca Digital Pública</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/layout.css">
+  <style>
+    :root {
+      --azul: #1E3A8A;
+      --azul-escuro: #172B6E;
+      --azul-medio: #2D52C7;
+      --azul-claro: #3B82F6;
+      --azul-palido: #DBEAFE;
+      --azul-fundo: #EFF6FF;
+      --branco: #FFFFFF;
+      --cinza-claro: #F8FAFC;
+      --cinza-borda: #E2E8F0;
+      --cinza-texto: #64748B;
+      --cinza-escuro: #334155;
+      --texto: #0F172A;
+      --verde: #059669;
+      --laranja: #D97706;
+      --vermelho: #DC2626;
+      --sombra: 0 4px 16px rgba(30, 58, 138, 0.1);
+      --r: 10px;
+      --fonte-d: 'Playfair Display', Georgia, serif;
+      --fonte-c: 'IBM Plex Sans', system-ui, sans-serif;
+      --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1)
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: var(--fonte-c);
+      background: var(--branco);
+      color: var(--texto);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column
+    }
+
+    main {
+      flex: 1
+    }
+
+    a {
+      color: var(--azul);
+      text-decoration: none;
+      transition: color var(--t)
+    }
+
+    a:hover {
+      color: var(--azul-claro)
+    }
+
+ 
+
+   
+
+    .bi {
+      font-size: 1rem;
+      vertical-align: middle;
+    }
+
+    h1 .bi {
+      font-size: 1.4rem;
+      margin-right: 6px;
+    }
+
+   
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--r);
+      font-family: var(--fonte-c);
+      font-size: .9rem;
+      font-weight: 500;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all var(--t);
+      text-decoration: none;
+      white-space: nowrap
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .btn-primary {
+      background: var(--azul);
+      color: #fff;
+      border-color: var(--azul)
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--azul-escuro);
+      border-color: var(--azul-escuro);
+      transform: translateY(-1px);
+      box-shadow: var(--sombra);
+      color: #fff
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--azul);
+      border-color: var(--azul)
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: var(--azul);
+      color: #fff
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--cinza-escuro);
+      border-color: var(--cinza-borda)
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--cinza-claro)
+    }
+
+    .btn-danger {
+      background: var(--vermelho);
+      color: #fff;
+      border-color: var(--vermelho)
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: #B91C1C;
+      color: #fff;
+      transform: translateY(-1px)
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: .82rem;
+      border-radius: 6px
+    }
+
+    .btn-lg {
+      padding: 14px 32px;
+      font-size: 1rem;
+      border-radius: 14px
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px
+    }
+
+    /* ACERVO */
+    .acervo-header {
+      background: linear-gradient(135deg, var(--azul), var(--azul-medio));
+      color: #fff;
+      padding: 48px 0 32px
+    }
+
+    .acervo-header h1 {
+      font-family: var(--fonte-d);
+      font-size: 2rem;
+      margin-bottom: 6px
+    }
+
+    .acervo-header p {
+      opacity: .85;
+      font-size: .95rem
+    }
+
+    .acervo-toolbar {
+      padding: 20px 0;
+      background: #fff;
+      border-bottom: 1px solid var(--cinza-borda);
+      position: sticky;
+      top: 64px;
+      z-index: 100
+    }
+
+    .toolbar-inner {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px
+    }
+
+    .search-wrap .form-control {
+      padding-left: 38px
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--cinza-texto);
+      font-size: .9rem;
+      pointer-events: none
+    }
+
+    .acervo-main {
+      padding: 32px 0
+    }
+
+    /* LIVROS GRID */
+    .livros-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 22px
+    }
+
+    .livro-card {
+      background: #fff;
+      border: 1px solid var(--cinza-borda);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all var(--t);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer
+    }
+
+    .livro-card:hover {
+      box-shadow: var(--sombra);
+      transform: translateY(-3px);
+      border-color: var(--azul-palido)
+    }
+
+    .livro-capa {
+      height: 200px;
+      overflow: hidden;
+      background: var(--azul-fundo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative
+    }
+
+    .livro-capa img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .capa-ph {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--azul);
+      opacity: .35;
+      font-size: 3rem
+    }
+
+    .status-badge-abs {
+      position: absolute;
+      top: 10px;
+      right: 10px
+    }
+
+    .livro-corpo {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column
+    }
+
+    .livro-titulo {
+      font-weight: 600;
+      font-size: .95rem;
+      margin-bottom: 4px;
+      line-height: 1.3
+    }
+
+    .livro-autor {
+      font-size: .8rem;
+      color: var(--cinza-texto);
+      margin-bottom: 8px
+    }
+
+    .livro-meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px
+    }
+
+    .livro-footer {
+      margin-top: auto
+    }
+
+    /* BADGE */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600
+    }
+
+    .badge-green {
+      background: #D1FAE5;
+      color: #065F46
+    }
+
+    .badge-blue {
+      background: var(--azul-palido);
+      color: var(--azul)
+    }
+
+    .badge-orange {
+      background: #FEF3C7;
+      color: #92400E
+    }
+
+    .badge-red {
+      background: #FEE2E2;
+      color: #991B1B
+    }
+
+    .badge-gray {
+      background: #F1F5F9;
+      color: #475569
+    }
+
+    /* FORMS */
+    .form-group {
+      margin-bottom: 18px
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--cinza-escuro)
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--cinza-borda);
+      border-radius: var(--r);
+      font-family: var(--fonte-c);
+      font-size: .9rem;
+      color: var(--texto);
+      background: #fff;
+      transition: border-color var(--t), box-shadow var(--t);
+      outline: none
+    }
+
+    .form-control:focus {
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .15)
+    }
+
+    .form-control::placeholder {
+      color: #94A3B8
+    }
+
+    /* ALERT */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--r);
+      margin-bottom: 16px;
+      font-size: .875rem;
+      line-height: 1.6
+    }
+
+    .alert-success {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 1px solid #A7F3D0
+    }
+
+    .alert-error {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FECACA
+    }
+
+    .alert-info {
+      background: var(--azul-palido);
+      color: var(--azul-escuro);
+      border: 1px solid #BFDBFE
+    }
+
+    .alert-warning {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .55);
+      backdrop-filter: blur(3px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(30, 58, 138, .14);
+      animation: modalIn .22s ease;
+      max-height: 90vh;
+      overflow-y: auto
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px
+    }
+
+    .modal-title {
+      font-family: var(--fonte-d);
+      font-size: 1.3rem;
+      color: var(--azul)
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--cinza-claro);
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--cinza-texto);
+      transition: all var(--t)
+    }
+
+    .modal-close:hover {
+      background: var(--cinza-borda);
+      color: var(--texto)
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(-16px) scale(.97)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    /* DETAIL GRID */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 20px
+    }
+
+    .detail-capa {
+      border-radius: var(--r);
+      overflow: hidden;
+      background: var(--azul-fundo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 190px;
+      font-size: 3rem
+    }
+
+    .detail-capa img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .detail-info h2 {
+      font-family: var(--fonte-d);
+      font-size: 1.4rem;
+      color: var(--azul);
+      margin-bottom: 8px
+    }
+
+    .detail-info p {
+      font-size: .875rem;
+      color: var(--cinza-texto);
+      margin-bottom: 4px
+    }
+
+    .detail-info strong {
+      color: var(--texto)
+    }
+
+    /* EMPTY */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--cinza-texto);
+      grid-column: 1/-1
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      opacity: .5
+    }
+
+    .empty-state h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+      color: var(--cinza-escuro)
+    }
+
+   
+    /* TOAST */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .toast {
+      padding: 12px 18px;
+      border-radius: var(--r);
+      box-shadow: 0 10px 40px rgba(30, 58, 138, .14);
+      font-size: .875rem;
+      font-weight: 500;
+      min-width: 260px;
+      max-width: 380px;
+      animation: toastIn .3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .toast-success {
+      background: var(--verde);
+      color: #fff
+    }
+
+    .toast-error {
+      background: var(--vermelho);
+      color: #fff
+    }
+
+    .toast-info {
+      background: var(--azul);
+      color: #fff
+    }
+
+    .toast-warning {
+      background: var(--laranja);
+      color: #fff
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0)
+      }
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    @media(max-width:768px) {
+      .detail-grid {
+        grid-template-columns: 1fr
+      }
+
+      .toolbar-inner {
+        flex-direction: column;
+        align-items: stretch
+      }
+
+     
+    }
+  </style>
+</head>
+
+<body>
+  <header id="navbar"></header>
+  <main>
+    <div class="acervo-header">
+      <div class="container">
+        <h1><i class="bi bi-journal-bookmark-fill"></i> Acervo Digital</h1>
+        <p>Explore nossa coleção completa. Reserve online e retire na biblioteca.</p>
+      </div>
+    </div>
+    <div class="acervo-toolbar">
+      <div class="container">
+        <div class="toolbar-inner">
+          <div class="search-wrap">
+            <span class="search-icon"><i class="bi bi-search"></i></span>
+            <input type="text" id="busca" class="form-control" placeholder="Buscar por título ou autor...">
+          </div>
+          <select id="filtro-cat" class="form-control" style="min-width:160px"></select>
+          <span style="color:var(--cinza-texto);font-size:.85rem;white-space:nowrap"><span id="total">0</span>
+            livros</span>
+        </div>
+      </div>
+    </div>
+    <section class="acervo-main">
+      <div class="container">
+        <div id="livros-grid" class="livros-grid"></div>
+      </div>
+    </section>
+  </main>
+  <footer id="footer"></footer>
+  <div id="toast-container"></div>
+
+  <script src="js/layout.js"></script>
+  <script>
+    // ===================== STORAGE =====================
+    const K = { USERS: 'bdp_users', BOOKS: 'bdp_books', CU: 'bdp_currentUser', EXT: 'bdp_extLoans' };
+    const sg = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+    const ss = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+    const gid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    function getUsers() { return sg(K.USERS) || []; }
+    function saveUsers(u) { ss(K.USERS, u); }
+    function getUserById(id) { return getUsers().find(u => u.id === id) || null; }
+    function getUserByEmail(e) { return getUsers().find(u => u.email.toLowerCase() === e.toLowerCase()) || null; }
+    function getCurrentUser() { return sg(K.CU); }
+    function setCurrentUser(u) { ss(K.CU, u); }
+    function getBooks() { return sg(K.BOOKS) || []; }
+    function saveBooks(b) { ss(K.BOOKS, b); }
+    function getBookById(id) { return getBooks().find(b => b.id === id) || null; }
+    function updateBook(id, data) { const books = getBooks().map(b => b.id === id ? { ...b, ...data } : b); saveBooks(books); }
+    function verificarReservas() {
+      const agora = new Date(), books = getBooks(); let ok = false;
+      books.forEach(b => { if (b.status === 'reservado' && b.prazoRetirada && agora > new Date(b.prazoRetirada)) { b.status = 'disponivel'; b.emprestadoPara = null; b.dataReserva = null; b.prazoRetirada = null; ok = true; } });
+      if (ok) saveBooks(books);
+    }
+    function seedIfEmpty() {
+      if (getBooks().length > 0) return;
+      if (!getUserByEmail('admin@biblioteca.gov.br')) { const u = { id: gid(), nome: 'Administrador', email: 'admin@biblioteca.gov.br', senha: 'admin123', tipo: 'admin', criadoEm: new Date().toISOString() }; saveUsers([u]); }
+      const livros = [
+        { titulo: 'Dom Casmurro', autor: 'Machado de Assis', categoria: 'Literatura Brasileira', ano: '1899', descricao: 'Um clássico sobre amor, ciúme e traição.' },
+        { titulo: 'O Cortiço', autor: 'Aluísio Azevedo', categoria: 'Literatura Brasileira', ano: '1890', descricao: 'Romance naturalista sobre os cortiços do Rio de Janeiro.' },
+        { titulo: 'Iracema', autor: 'José de Alencar', categoria: 'Literatura Brasileira', ano: '1865', descricao: 'Romance indianista de José de Alencar.' },
+        { titulo: 'Grande Sertão: Veredas', autor: 'João Guimarães Rosa', categoria: 'Literatura Brasileira', ano: '1956', descricao: 'Obra-prima da literatura brasileira do século XX.' },
+        { titulo: 'Sagarana', autor: 'João Guimarães Rosa', categoria: 'Contos', ano: '1946', descricao: 'Contos ambientados no sertão mineiro.' },
+        { titulo: 'O Senhor dos Anéis', autor: 'J.R.R. Tolkien', categoria: 'Fantasia', ano: '1954', descricao: 'A épica jornada de Frodo para destruir o Um Anel.' },
+        { titulo: 'Sapiens', autor: 'Yuval Noah Harari', categoria: 'História', ano: '2011', descricao: 'Uma breve história da humanidade.' },
+        { titulo: 'O Pequeno Príncipe', autor: 'Antoine de Saint-Exupéry', categoria: 'Fábula', ano: '1943', descricao: 'Um pequeno príncipe viaja por diferentes planetas.' },
+        { titulo: 'Cem Anos de Solidão', autor: 'Gabriel García Márquez', categoria: 'Romance', ano: '1967', descricao: 'A saga da família Buendía em Macondo.' },
+        { titulo: 'A Revolução dos Bichos', autor: 'George Orwell', categoria: 'Fábula', ano: '1945', descricao: 'Alegoria política sobre totalitarismo.' },
+        { titulo: 'Crime e Castigo', autor: 'Fiodor Dostoiévski', categoria: 'Romance', ano: '1866', descricao: 'A história de Raskólnikov e seu crime.' },
+        { titulo: '1984', autor: 'George Orwell', categoria: 'Ficção Científica', ano: '1949', descricao: 'Uma distopia sobre um regime totalitário.' },
+        { titulo: 'Admirável Mundo Novo', autor: 'Aldous Huxley', categoria: 'Ficção Científica', ano: '1932', descricao: 'Um futuro onde a felicidade é obrigatória.' },
+        { titulo: 'O Hobbit', autor: 'J.R.R. Tolkien', categoria: 'Fantasia', ano: '1937', descricao: 'A aventura de Bilbo Bolseiro.' },
+        { titulo: 'Memórias Póstumas de Brás Cubas', autor: 'Machado de Assis', categoria: 'Literatura Brasileira', ano: '1881', descricao: 'Narrado por um defunto autor.' },
+      ];
+      const books = livros.map(l => ({ id: gid(), ...l, capa: '', status: 'disponivel', emprestadoPara: null, dataReserva: null, prazoRetirada: null, dataEmprestimo: null, dataDevolucao: null, criadoEm: new Date().toISOString() }));
+      saveBooks(books);
+    }
+
+    // ===================== UI HELPERS =====================
+    function showToast(msg, tipo = 'info', dur = 3500) {
+      let c = document.getElementById('toast-container');
+      if (!c) { c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); }
+      const icons = {
+        success: '<i class="bi bi-check-circle-fill"></i>',
+        error: '<i class="bi bi-x-circle-fill"></i>',
+        info: '<i class="bi bi-info-circle-fill"></i>',
+        warning: '<i class="bi bi-exclamation-triangle-fill"></i>'
+      };
+      const t = document.createElement('div'); t.className = `toast toast-${tipo}`;
+      t.innerHTML = `<span>${icons[tipo]}</span>${msg}`; c.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(20px)'; t.style.transition = 'all .3s ease'; setTimeout(() => t.remove(), 310); }, dur);
+    }
+    function closeModal() { const m = document.getElementById('active-modal'); if (m) m.remove(); }
+    function openModal(html, onMount) {
+      closeModal();
+      const ov = document.createElement('div'); ov.className = 'modal-overlay'; ov.id = 'active-modal';
+      ov.innerHTML = `<div class="modal">${html}</div>`;
+      ov.addEventListener('click', e => { if (e.target === ov) closeModal(); });
+      document.body.appendChild(ov);
+      if (onMount) onMount(ov);
+    }
+    function fmtDate(iso) { if (!iso) return '—'; return new Intl.DateTimeFormat('pt-BR').format(new Date(iso)); }
+    function statusBadge(s) {
+      const m = { disponivel: '<span class="badge badge-green">Disponível</span>', reservado: '<span class="badge badge-orange">Reservado</span>', emprestado: '<span class="badge badge-red">Emprestado</span>' };
+      return m[s] || `<span class="badge badge-gray">${s}</span>`;
+    }
+    function capaHtml(livro, h = 200) {
+      if (livro.capa) return `<img src="${livro.capa}" alt="${livro.titulo}" style="width:100%;height:${h}px;object-fit:cover" onerror="this.parentElement.innerHTML='<div class=capa-ph><i class=&quot;bi bi-book&quot;></i></div>'" >`;
+      return '<div class="capa-ph"><i class="bi bi-book"></i></div>';
+    }
+
+  
+    // ===================== ACERVO =====================
+    const CATS = ['Literatura Brasileira', 'Romance', 'Contos', 'Fantasia', 'Ficção Científica', 'História', 'Fábula', 'Biografia', 'Filosofia', 'Ciências', 'Direito', 'Outros'];
+    let filtros = { busca: '', cat: '' };
+
+    function initFiltros() {
+      const sel = document.getElementById('filtro-cat');
+      sel.innerHTML = '<option value="">Todas as categorias</option>';
+      CATS.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+      document.getElementById('busca').addEventListener('input', e => { filtros.busca = e.target.value; renderGrid(); });
+      sel.addEventListener('change', e => { filtros.cat = e.target.value; renderGrid(); });
+    }
+
+    function getLivrosFiltrados() {
+      const q = filtros.busca.toLowerCase();
+      return getBooks().filter(b => {
+        const mq = !q || b.titulo.toLowerCase().includes(q) || b.autor.toLowerCase().includes(q);
+        const mc = !filtros.cat || b.categoria === filtros.cat;
+        return mq && mc;
+      });
+    }
+
+    function renderGrid() {
+      const container = document.getElementById('livros-grid');
+      const livros = getLivrosFiltrados();
+      document.getElementById('total').textContent = livros.length;
+      if (!livros.length) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-icon">
+  <i class="bi bi-journal-x"></i>
+</div><h3>Nenhum livro encontrado</h3><p>Tente mudar os filtros.</p></div>`;
+        return;
+      }
+      container.innerHTML = livros.map(b => `
+    <div class="livro-card" onclick="abrirDetalhe('${b.id}')">
+      <div class="livro-capa">
+        ${capaHtml(b)}
+        <div class="status-badge-abs">${statusBadge(b.status)}</div>
+      </div>
+      <div class="livro-corpo">
+        <div class="livro-titulo">${b.titulo}</div>
+        <div class="livro-autor">${b.autor}</div>
+        <div class="livro-meta">
+          <span class="badge badge-blue">${b.categoria}</span>
+          ${b.ano ? `<span class="badge badge-gray">${b.ano}</span>` : ''}
+        </div>
+        <div class="livro-footer">
+          <button class="btn btn-primary btn-sm" style="width:100%" onclick="event.stopPropagation();abrirDetalhe('${b.id}')">Ver Detalhes</button>
+        </div>
+      </div>
+    </div>`).join('');
+    }
+
+    function abrirDetalhe(id) {
+      const b = getBookById(id);
+      if (!b) return;
+
+      const u = getCurrentUser();
+      const jaRes = u && b.emprestadoPara === u.id && b.status === 'reservado';
+      const jaEmp = u && b.emprestadoPara === u.id && b.status === 'emprestado';
+
+      let acao = '';
+
+      if (!u) {
+        acao = `
+      <a href="login.html" class="btn btn-primary" style="width:100%">
+        <i class="bi bi-box-arrow-in-right"></i>
+        Entrar para Reservar
+      </a>`;
+      }
+
+      else if (b.status === 'disponivel') {
+        acao = `
+      <button class="btn btn-primary" style="width:100%" onclick="reservar('${id}')">
+        <i class="bi bi-bookmark-plus-fill"></i>
+        Reservar este Livro
+      </button>`;
+      }
+
+      else if (jaRes) {
+        acao = `
+      <div class="alert alert-info">
+        <i class="bi bi-check-circle-fill"></i>
+        Você reservou este livro. Compareça até
+        <strong>${fmtDate(b.prazoRetirada)}</strong>.
+      </div>`;
+      }
+
+      else if (jaEmp) {
+        acao = `
+      <div class="alert alert-info">
+        <i class="bi bi-journal-check"></i>
+        Este livro está com você. Devolução:
+        <strong>${fmtDate(b.dataDevolucao)}</strong>.
+      </div>`;
+      }
+
+      else if (b.status === 'reservado') {
+        acao = `
+      <div class="alert alert-warning">
+        <i class="bi bi-hourglass-split"></i>
+        Reservado por outro usuário.
+      </div>`;
+      }
+
+      else {
+        acao = `
+      <div class="alert alert-warning">
+        <i class="bi bi-journal-x"></i>
+        Emprestado no momento.
+      </div>`;
+      }
+
+      openModal(`
+    <div class="modal-header">
+      <span class="modal-title">
+        <i class="bi bi-journal-text"></i>
+        Detalhes do Livro
+      </span>
+      <button class="modal-close" onclick="closeModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-capa">
+        ${capaHtml(b, 190)}
+      </div>
+
+      <div class="detail-info">
+        <h2>${b.titulo}</h2>
+        <p><strong>Autor:</strong> ${b.autor}</p>
+        <p><strong>Categoria:</strong> ${b.categoria}</p>
+        ${b.ano ? `<p><strong>Ano:</strong> ${b.ano}</p>` : ''}
+        <p><strong>Status:</strong> ${statusBadge(b.status)}</p>
+
+        ${b.descricao ? `
+          <p style="margin-top:10px;font-size:.85rem;color:var(--cinza-texto)">
+            ${b.descricao}
+          </p>` : ''}
+      </div>
+    </div>
+
+    <div style="margin-top:20px">
+      ${acao}
+    </div>
+  `);
+    }
+
+    function reservar(id) {
+      const u = getCurrentUser();
+      if (!u) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const b = getBookById(id);
+
+      if (!b || b.status !== 'disponivel') {
+        showToast('Livro não disponível.', 'error');
+        return;
+      }
+
+      const hoje = new Date();
+      const prazo = new Date(hoje);
+      prazo.setDate(prazo.getDate() + 1);
+
+      updateBook(id, {
+        status: 'reservado',
+        emprestadoPara: u.id,
+        dataReserva: hoje.toISOString(),
+        prazoRetirada: prazo.toISOString()
+      });
+
+      closeModal();
+      renderGrid();
+
+      openModal(`
+    <div class="modal-header">
+      <span class="modal-title">
+        <i class="bi bi-check-circle-fill"></i>
+        Reserva Confirmada
+      </span>
+      <button class="modal-close" onclick="closeModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="alert alert-info" style="line-height:1.7;margin-bottom:20px">
+      <i class="bi bi-bookmark-check-fill"></i>
+      <strong>"${b.titulo}"</strong> foi reservado com sucesso.<br><br>
+
+      Você tem <strong>1 dia</strong> para comparecer à biblioteca e retirar o livro.<br>
+
+      <strong>
+        <i class="bi bi-calendar-event"></i>
+        Prazo de retirada: ${fmtDate(prazo.toISOString())}
+      </strong>
+      <br><br>
+
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      Após esse prazo, a reserva será cancelada automaticamente.
+    </div>
+
+    <button class="btn btn-primary" style="width:100%" onclick="closeModal()">
+      <i class="bi bi-check-lg"></i>
+      Entendido
+    </button>
+  `);
+
+      showToast('Reserva realizada com sucesso!', 'success');
+    }
+
+    // ===================== INIT =====================
+    seedIfEmpty();
+    verificarReservas();
+    renderNavbar('acervo');
+    renderFooter();
+    initFiltros();
+    renderGrid();
+  </script>
+</body>
+
+</html>

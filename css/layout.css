@@ -1,0 +1,287 @@
+/* ================= NAVBAR ================= */
+
+#navbar {
+  background: var(--branco);
+  border-bottom: 1px solid var(--cinza-borda);
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  box-shadow: 0 1px 8px rgba(30, 58, 138, 0.07);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 64px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* LOGO (mantive o tamanho maior que já estava no final) */
+.nav-logo {
+  width: 42px;
+  height: 42px;
+  background: var(--azul);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-logo i {
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+/* LINKS */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  margin-left: 16px;
+}
+
+.nav-links a {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--cinza-escuro);
+  transition: all var(--t);
+  text-decoration: none;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background: var(--azul-fundo);
+  color: var(--azul);
+}
+
+.nav-links i {
+  margin-right: 6px;
+  font-size: 0.9rem;
+}
+
+/* AUTH */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--cinza-borda);
+  transition: all var(--t);
+}
+
+.nav-user:hover {
+  border-color: var(--azul);
+  background: var(--azul-fundo);
+}
+
+/* HAMBURGER */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  color: var(--azul);
+  cursor: pointer;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px) {
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 64px;
+    left: -100%;
+    width: 260px;
+    height: 100vh;
+    background: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px 20px;
+    gap: 16px;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
+    z-index: 999;
+  }
+
+  .nav-links.show {
+    left: 0;
+  }
+
+  .nav-links a {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 0.95rem;
+  }
+
+  .nav-auth {
+    display: none;
+  }
+}
+
+/* ================= FOOTER ================= */
+
+#footer {
+  background: var(--azul);
+  color: rgba(255, 255, 255, .9);
+  padding: 48px 0 0;
+  margin-top: auto;
+}
+
+.footer-inner {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 200px;
+}
+
+.footer-logo {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, .15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.footer-name {
+  font-weight: 600;
+  font-size: .95rem;
+  margin-bottom: 4px;
+}
+
+.footer-slogan {
+  font-size: .8rem;
+  opacity: .7;
+}
+
+.footer-links {
+  display: flex;
+  gap: 48px;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.footer-col h4 {
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  opacity: .6;
+  margin-bottom: 4px;
+}
+
+.footer-col a,
+.footer-col span {
+  font-size: .875rem;
+  color: rgba(255, 255, 255, .78);
+  text-decoration: none;
+  transition: opacity .2s;
+}
+
+.footer-col a:hover {
+  opacity: 1;
+  color: #fff;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 0;
+  font-size: .78rem;
+  opacity: .55;
+}
+
+.footer-col i {
+  margin-right: 6px;
+  font-size: 0.9rem;
+}
+
+.footer-logo i {
+  font-size: 1.3rem;
+  color: white;
+}
+
+/* BRAND TEXT */
+.brand-name {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--azul);
+  line-height: 1.2;
+}
+
+.brand-sub {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--cinza-texto);
+}
+
+/* USER */
+.user-av {
+  width: 30px;
+  height: 30px;
+  background: var(--azul);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.user-nm {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cinza-escuro);
+}

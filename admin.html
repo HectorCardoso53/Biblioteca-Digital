@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin · Biblioteca Digital Pública</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--azul:#1E3A8A;--azul-escuro:#172B6E;--azul-medio:#2D52C7;--azul-claro:#3B82F6;--azul-palido:#DBEAFE;--azul-fundo:#EFF6FF;--branco:#FFFFFF;--cinza-claro:#F8FAFC;--cinza-borda:#E2E8F0;--cinza-texto:#64748B;--cinza-escuro:#334155;--texto:#0F172A;--verde:#059669;--laranja:#D97706;--vermelho:#DC2626;--sombra:0 4px 16px rgba(30,58,138,0.1);--r:10px;--fonte-d:'Playfair Display',Georgia,serif;--fonte-c:'IBM Plex Sans',system-ui,sans-serif;--t:0.22s cubic-bezier(0.4,0,0.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--fonte-c);background:var(--cinza-claro);color:var(--texto);min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--azul);text-decoration:none}
+
+/* NAVBAR */
+#navbar{background:#fff;border-bottom:1px solid var(--cinza-borda);position:sticky;top:0;z-index:500;box-shadow:0 1px 8px rgba(30,58,138,.07)}
+.nav-inner{display:flex;align-items:center;gap:20px;height:64px;max-width:1400px;margin:0 auto;padding:0 24px}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo{width:38px;height:38px;background:var(--azul);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.brand-name{display:block;font-weight:700;font-size:.95rem;color:var(--azul);line-height:1.2}
+.brand-sub{display:block;font-size:.7rem;color:var(--cinza-texto)}
+.nav-auth{display:flex;align-items:center;gap:10px;margin-left:auto}
+.nav-user{display:flex;align-items:center;gap:8px;text-decoration:none;padding:4px 10px 4px 4px;border-radius:999px;border:1px solid var(--cinza-borda)}
+.user-av{width:30px;height:30px;background:var(--azul);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:700}
+.user-nm{font-size:.85rem;font-weight:500;color:var(--cinza-escuro)}
+.admin-badge{background:var(--azul-palido);color:var(--azul);font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 20px;border-radius:var(--r);font-family:var(--fonte-c);font-size:.875rem;font-weight:500;border:2px solid transparent;cursor:pointer;transition:all var(--t);text-decoration:none;white-space:nowrap}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:var(--azul);color:#fff;border-color:var(--azul)}
+.btn-primary:hover:not(:disabled){background:var(--azul-escuro);color:#fff;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--azul);border-color:var(--azul)}
+.btn-ghost{background:transparent;color:var(--cinza-escuro);border-color:var(--cinza-borda)}
+.btn-ghost:hover:not(:disabled){background:var(--cinza-claro)}
+.btn-success{background:var(--verde);color:#fff;border-color:var(--verde)}
+.btn-success:hover:not(:disabled){background:#047857;color:#fff;transform:translateY(-1px)}
+.btn-danger{background:var(--vermelho);color:#fff;border-color:var(--vermelho)}
+.btn-danger:hover:not(:disabled){background:#B91C1C;color:#fff;transform:translateY(-1px)}
+.btn-warning{background:var(--laranja);color:#fff;border-color:var(--laranja)}
+.btn-warning:hover:not(:disabled){background:#B45309;color:#fff;transform:translateY(-1px)}
+.btn-sm{padding:5px 12px;font-size:.8rem;border-radius:6px}
+.btn-xs{padding:3px 9px;font-size:.75rem;border-radius:5px}
+
+/* LAYOUT */
+.admin-wrap{display:flex;min-height:calc(100vh - 64px)}
+.sidebar{width:250px;background:var(--azul);color:#fff;padding:20px 0;flex-shrink:0;position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto}
+.sidebar-title{padding:0 20px 16px;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;opacity:.55;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:8px}
+.sidebar-nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.75);font-size:.875rem;font-weight:500;transition:all var(--t);border-left:3px solid transparent;text-decoration:none}
+.sidebar-nav a:hover,.sidebar-nav a.active{color:#fff;background:rgba(255,255,255,.1);border-left-color:#93C5FD}
+.sidebar-sep{height:1px;background:rgba(255,255,255,.1);margin:8px 20px}
+.content{flex:1;padding:28px;overflow-x:auto}
+
+/* SECTION */
+.sec{display:none}
+.sec.active{display:block}
+.sec-title{font-family:var(--fonte-d);font-size:1.7rem;color:var(--azul);margin-bottom:6px}
+.sec-sub{color:var(--cinza-texto);margin-bottom:24px;font-size:.9rem}
+
+/* DASH */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.dash-card{background:#fff;border-radius:var(--r);padding:20px;border:1px solid var(--cinza-borda);display:flex;align-items:center;gap:14px;transition:all var(--t)}
+.dash-card:hover{box-shadow:var(--sombra);transform:translateY(-2px)}
+.dash-icon{width:44px;height:44px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.dash-icon.blue{background:var(--azul-palido)}
+.dash-icon.green{background:#D1FAE5}
+.dash-icon.orange{background:#FEF3C7}
+.dash-icon.red{background:#FEE2E2}
+.dash-val{font-family:var(--fonte-d);font-size:1.7rem;font-weight:700;color:var(--azul);line-height:1}
+.dash-lbl{font-size:.78rem;color:var(--cinza-texto);margin-top:3px}
+
+/* PANEL */
+.panel{background:#fff;border-radius:14px;border:1px solid var(--cinza-borda);margin-bottom:24px;overflow:hidden}
+.panel-head{padding:16px 20px;border-bottom:1px solid var(--cinza-borda);background:var(--azul-fundo);display:flex;justify-content:space-between;align-items:center}
+.panel-title{font-weight:600;font-size:.95rem;color:var(--azul);display:flex;align-items:center;gap:8px}
+.panel-body{padding:20px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--cinza-borda)}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--azul-fundo)}
+th{padding:10px 14px;text-align:left;font-size:.76rem;font-weight:600;color:var(--azul);text-transform:uppercase;letter-spacing:.05em}
+td{padding:11px 14px;font-size:.84rem;border-top:1px solid var(--cinza-borda);vertical-align:middle}
+tr:hover td{background:var(--cinza-claro)}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:.74rem;font-weight:600}
+.badge-green{background:#D1FAE5;color:#065F46}
+.badge-blue{background:var(--azul-palido);color:var(--azul)}
+.badge-orange{background:#FEF3C7;color:#92400E}
+.badge-red{background:#FEE2E2;color:#991B1B}
+.badge-gray{background:#F1F5F9;color:#475569}
+.badge-purple{background:#EDE9FE;color:#5B21B6}
+
+/* FORMS */
+.form-group{margin-bottom:16px}
+.form-label{display:block;margin-bottom:5px;font-size:.84rem;font-weight:500;color:var(--cinza-escuro)}
+.form-control{width:100%;padding:9px 13px;border:1.5px solid var(--cinza-borda);border-radius:var(--r);font-family:var(--fonte-c);font-size:.875rem;color:var(--texto);background:#fff;outline:none;transition:border-color var(--t),box-shadow var(--t)}
+.form-control:focus{border-color:var(--azul-claro);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.form-control::placeholder{color:#94A3B8}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.span-2{grid-column:1/-1}
+
+/* ALERT */
+.alert{padding:11px 15px;border-radius:var(--r);margin-bottom:14px;font-size:.84rem;line-height:1.6}
+.alert-info{background:var(--azul-palido);color:var(--azul-escuro);border:1px solid #BFDBFE}
+.alert-warning{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
+.alert-success{background:#D1FAE5;color:#065F46;border:1px solid #A7F3D0}
+
+/* TABS */
+.tabs{display:flex;background:var(--cinza-claro);padding:4px;border-radius:var(--r);margin-bottom:20px;gap:4px}
+.tab-btn{flex:1;padding:8px 14px;border:none;background:none;font-family:var(--fonte-c);font-size:.85rem;font-weight:500;color:var(--cinza-texto);cursor:pointer;border-radius:6px;transition:all var(--t)}
+.tab-btn.active{background:#fff;color:var(--azul);box-shadow:var(--sombra)}
+
+/* USER SEARCH */
+.user-result{padding:8px 12px;cursor:pointer;border:1px solid var(--cinza-borda);border-radius:6px;margin-bottom:6px;transition:all var(--t)}
+.user-result:hover{border-color:var(--azul);background:var(--azul-fundo)}
+
+/* LIVROS GRID ADMIN */
+.livros-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.livro-admin-card{border:1px solid var(--cinza-borda);border-radius:var(--r);padding:14px;display:flex;gap:12px;background:#fff;transition:all var(--t)}
+.livro-admin-card:hover{box-shadow:var(--sombra)}
+.livro-mini-capa{width:50px;height:66px;border-radius:6px;background:var(--azul-fundo);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;overflow:hidden}
+.livro-mini-capa img{width:100%;height:100%;object-fit:cover}
+.livro-mini-info{flex:1;min-width:0}
+.livro-mini-info h4{font-size:.85rem;font-weight:600;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.livro-mini-info p{font-size:.76rem;color:var(--cinza-texto);margin-bottom:8px}
+.livro-mini-btns{display:flex;gap:6px;flex-wrap:wrap}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(3px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#fff;border-radius:20px;padding:28px;max-width:540px;width:100%;box-shadow:0 10px 40px rgba(30,58,138,.14);animation:modalIn .22s ease;max-height:92vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-family:var(--fonte-d);font-size:1.2rem;color:var(--azul)}
+.modal-close{width:30px;height:30px;border-radius:50%;border:none;background:var(--cinza-claro);cursor:pointer;font-size:1rem;color:var(--cinza-texto)}
+.modal-close:hover{background:var(--cinza-borda)}
+@keyframes modalIn{from{opacity:0;transform:translateY(-14px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* EMPTY */
+.empty-state{text-align:center;padding:40px 20px;color:var(--cinza-texto)}
+.empty-icon{font-size:2.5rem;opacity:.45;margin-bottom:10px}
+.empty-state h3{font-size:1rem;color:var(--cinza-escuro)}
+
+/* TOAST */
+#toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px}
+.toast{padding:11px 16px;border-radius:var(--r);box-shadow:0 10px 40px rgba(30,58,138,.14);font-size:.84rem;font-weight:500;min-width:240px;max-width:360px;animation:toastIn .3s ease;display:flex;align-items:center;gap:10px}
+.toast-success{background:var(--verde);color:#fff}
+.toast-error{background:var(--vermelho);color:#fff}
+.toast-info{background:var(--azul);color:#fff}
+.toast-warning{background:var(--laranja);color:#fff}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+.hidden{display:none!important}
+.mt-2{margin-top:16px}
+.flex-btns{display:flex;gap:8px;flex-wrap:wrap}
+
+#footer{background:var(--azul);color:rgba(255,255,255,.9);padding:20px 0;margin-top:auto}
+.footer-simple{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;font-size:.78rem;opacity:.6}
+
+@media(max-width:1024px){.admin-wrap{flex-direction:column}.sidebar{width:100%;height:auto;position:static;display:flex;flex-wrap:wrap;padding:8px}.sidebar-nav{display:flex;flex-wrap:wrap}.sidebar-nav a{border-left:none;border-bottom:2px solid transparent;padding:8px 12px}.sidebar-title,.sidebar-sep{display:none}.dash-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.dash-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.content{padding:16px}}
+</style>
+</head>
+<body>
+<header id="navbar"></header>
+
+<div class="admin-wrap">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Administração</div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <a href="#" class="active" data-sec="sec-dash">📊 Dashboard</a>
+      <a href="#" data-sec="sec-reservas">🔖 Reservas Pendentes</a>
+      <a href="#" data-sec="sec-emprestimos">📖 Empréstimos Ativos</a>
+      <div class="sidebar-sep"></div>
+      <a href="#" data-sec="sec-presencial">🏛️ Empréstimo Presencial</a>
+      <div class="sidebar-sep"></div>
+      <a href="#" data-sec="sec-livros">📚 Gerenciar Livros</a>
+      <a href="#" data-sec="sec-cadlivro">➕ Cadastrar Livro</a>
+      <div class="sidebar-sep"></div>
+      <a href="#" data-sec="sec-usuarios">👥 Usuários</a>
+    </nav>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <section class="sec active" id="sec-dash">
+      <h1 class="sec-title">Dashboard</h1>
+      <p class="sec-sub">Visão geral do sistema em tempo real</p>
+      <div class="dash-grid">
+        <div class="dash-card"><div class="dash-icon blue">📚</div><div><div class="dash-val" id="d-livros">—</div><div class="dash-lbl">Total de Livros</div></div></div>
+        <div class="dash-card"><div class="dash-icon green">👥</div><div><div class="dash-val" id="d-users">—</div><div class="dash-lbl">Usuários</div></div></div>
+        <div class="dash-card"><div class="dash-icon orange">📖</div><div><div class="dash-val" id="d-emp">—</div><div class="dash-lbl">Empréstimos Ativos</div></div></div>
+        <div class="dash-card"><div class="dash-icon red">🔖</div><div><div class="dash-val" id="d-res">—</div><div class="dash-lbl">Reservas Pendentes</div></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">📋 Resumo de Atividade</span></div>
+        <div class="panel-body" id="dash-resumo"></div>
+      </div>
+    </section>
+
+    <!-- RESERVAS PENDENTES -->
+    <section class="sec" id="sec-reservas">
+      <h1 class="sec-title">🔖 Reservas Pendentes</h1>
+      <p class="sec-sub">Confirme a retirada quando o usuário comparecer presencialmente.</p>
+      <div class="panel">
+        <div class="panel-body" id="cont-reservas"></div>
+      </div>
+    </section>
+
+    <!-- EMPRÉSTIMOS ATIVOS -->
+    <section class="sec" id="sec-emprestimos">
+      <h1 class="sec-title">📖 Empréstimos Ativos</h1>
+      <p class="sec-sub">Gerencie os livros atualmente emprestados e processe devoluções.</p>
+      <div class="panel">
+        <div class="panel-body" id="cont-emprestimos"></div>
+      </div>
+    </section>
+
+    <!-- EMPRÉSTIMO PRESENCIAL -->
+    <section class="sec" id="sec-presencial">
+      <h1 class="sec-title">🏛️ Empréstimo Presencial</h1>
+      <p class="sec-sub">Registre empréstimos diretos no balcão da biblioteca.</p>
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">Escolha o tipo de empréstimo</span></div>
+        <div class="panel-body">
+          <div class="tabs">
+            <button class="tab-btn active" id="tab-cad" onclick="switchPresTab('cad')">👤 Usuário Cadastrado</button>
+            <button class="tab-btn" id="tab-ext" onclick="switchPresTab('ext')">🏷️ Pessoa Externa</button>
+          </div>
+
+          <!-- CADASTRADO -->
+          <div id="pres-cad">
+            <div class="form-group">
+              <label class="form-label">Buscar usuário por nome ou e-mail</label>
+              <input type="text" id="busca-user" class="form-control" placeholder="Digite nome ou e-mail..." oninput="buscarUser()">
+              <div id="user-results" style="margin-top:8px"></div>
+              <div id="user-sel" style="margin-top:8px"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Selecionar livro disponível</label>
+              <select id="livro-cad" class="form-control"><option value="">Selecione um livro...</option></select>
+            </div>
+            <button class="btn btn-primary" onclick="emprestarCadastrado()">✅ Registrar Empréstimo</button>
+          </div>
+
+          <!-- EXTERNO -->
+          <div id="pres-ext" class="hidden">
+            <div class="form-group">
+              <label class="form-label">Nome completo da pessoa</label>
+              <input type="text" id="nome-ext" class="form-control" placeholder="Nome completo">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Documento (opcional)</label>
+              <input type="text" id="doc-ext" class="form-control" placeholder="CPF, RG ou outro documento">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Selecionar livro disponível</label>
+              <select id="livro-ext" class="form-control"><option value="">Selecione um livro...</option></select>
+            </div>
+            <button class="btn btn-primary" onclick="emprestarExterno()">✅ Registrar Empréstimo Externo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GERENCIAR LIVROS -->
+    <section class="sec" id="sec-livros">
+      <h1 class="sec-title">📚 Gerenciar Livros</h1>
+      <p class="sec-sub">Edite ou remova livros do acervo.</p>
+      <div id="cont-livros"></div>
+    </section>
+
+    <!-- CADASTRAR LIVRO -->
+    <section class="sec" id="sec-cadlivro">
+      <h1 class="sec-title">➕ Cadastrar Novo Livro</h1>
+      <p class="sec-sub">Adicione um novo título ao acervo.</p>
+      <div class="panel" style="max-width:640px">
+        <div class="panel-body">
+          <form id="form-cad-livro">
+            <div class="form-grid">
+              <div class="form-group span-2">
+                <label class="form-label">Título *</label>
+                <input type="text" name="titulo" class="form-control" placeholder="Título do livro" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Autor *</label>
+                <input type="text" name="autor" class="form-control" placeholder="Nome do autor" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Categoria</label>
+                <select name="categoria" class="form-control">
+                  <option>Literatura Brasileira</option><option>Romance</option><option>Contos</option>
+                  <option>Fantasia</option><option>Ficção Científica</option><option>História</option>
+                  <option>Fábula</option><option>Biografia</option><option>Filosofia</option>
+                  <option>Ciências</option><option>Direito</option><option>Outros</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Ano de Publicação</label>
+                <input type="number" name="ano" class="form-control" placeholder="ex: 1954" min="1000" max="2099">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quantidade de cópias</label>
+                <input type="number" name="copias" class="form-control" value="1" min="1" max="99">
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label">URL da Capa</label>
+                <input type="url" name="capa" class="form-control" placeholder="https://exemplo.com/capa.jpg">
+              </div>
+              <div class="form-group span-2">
+                <label class="form-label">Descrição</label>
+                <textarea name="descricao" class="form-control" rows="3" placeholder="Breve sinopse do livro..."></textarea>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" style="width:100%;padding:12px">📚 Cadastrar Livro</button>
+          </form>
+          <div id="cad-msg" class="hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- USUÁRIOS -->
+    <section class="sec" id="sec-usuarios">
+      <h1 class="sec-title">👥 Usuários Cadastrados</h1>
+      <p class="sec-sub">Lista de todos os usuários do sistema.</p>
+      <div class="panel">
+        <div class="panel-body" id="cont-usuarios"></div>
+      </div>
+    </section>
+
+  </div><!-- end content -->
+</div><!-- end admin-wrap -->
+
+<footer id="footer"></footer>
+<div id="toast-container"></div>
+
+<script>
+// ===================== STORAGE =====================
+const K={USERS:'bdp_users',BOOKS:'bdp_books',CU:'bdp_currentUser',EXT:'bdp_extLoans'};
+const sg=k=>{try{return JSON.parse(localStorage.getItem(k));}catch{return null;}};
+const ss=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const gid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function getUsers(){return sg(K.USERS)||[];}
+function saveUsers(u){ss(K.USERS,u);}
+function getUserById(id){return getUsers().find(u=>u.id===id)||null;}
+function getUserByEmail(e){return getUsers().find(u=>u.email.toLowerCase()===e.toLowerCase())||null;}
+function getCurrentUser(){return sg(K.CU);}
+function getBooks(){return sg(K.BOOKS)||[];}
+function saveBooks(b){ss(K.BOOKS,b);}
+function getBookById(id){return getBooks().find(b=>b.id===id)||null;}
+function updateBook(id,data){const books=getBooks().map(b=>b.id===id?{...b,...data}:b);saveBooks(books);}
+function deleteBookById(id){saveBooks(getBooks().filter(b=>b.id!==id));}
+function getExtLoans(){return sg(K.EXT)||[];}
+function saveExtLoans(l){ss(K.EXT,l);}
+function getExtLoanByLivro(lid){return getExtLoans().find(l=>l.livroId===lid)||null;}
+function removeExtLoan(lid){saveExtLoans(getExtLoans().filter(l=>l.livroId!==lid));}
+function createBook(data){
+  const books=getBooks();
+  const book={id:gid(),titulo:data.titulo||'',autor:data.autor||'',categoria:data.categoria||'Outros',ano:data.ano||'',capa:data.capa||'',descricao:data.descricao||'',status:'disponivel',emprestadoPara:null,dataReserva:null,prazoRetirada:null,dataEmprestimo:null,dataDevolucao:null,criadoEm:new Date().toISOString()};
+  books.push(book);saveBooks(books);return book;
+}
+function verificarReservas(){
+  const agora=new Date(),books=getBooks();let ok=false;
+  books.forEach(b=>{if(b.status==='reservado'&&b.prazoRetirada&&agora>new Date(b.prazoRetirada)){b.status='disponivel';b.emprestadoPara=null;b.dataReserva=null;b.prazoRetirada=null;ok=true;}});
+  if(ok)saveBooks(books);
+}
+function seedIfEmpty(){
+  if(getBooks().length>0)return;
+  if(!getUserByEmail('admin@biblioteca.gov.br')){ss(K.USERS,[{id:gid(),nome:'Administrador',email:'admin@biblioteca.gov.br',senha:'admin123',tipo:'admin',criadoEm:new Date().toISOString()}]);}
+  const livros=[
+    {titulo:'Dom Casmurro',autor:'Machado de Assis',categoria:'Literatura Brasileira',ano:'1899',descricao:'Clássico sobre amor e traição.'},
+    {titulo:'O Cortiço',autor:'Aluísio Azevedo',categoria:'Literatura Brasileira',ano:'1890',descricao:'Romance naturalista carioca.'},
+    {titulo:'Iracema',autor:'José de Alencar',categoria:'Literatura Brasileira',ano:'1865',descricao:'Romance indianista.'},
+    {titulo:'Grande Sertão: Veredas',autor:'João Guimarães Rosa',categoria:'Literatura Brasileira',ano:'1956',descricao:'Obra-prima da literatura brasileira.'},
+    {titulo:'Sagarana',autor:'João Guimarães Rosa',categoria:'Contos',ano:'1946',descricao:'Contos do sertão.'},
+    {titulo:'O Senhor dos Anéis',autor:'J.R.R. Tolkien',categoria:'Fantasia',ano:'1954',descricao:'A jornada de Frodo.'},
+    {titulo:'Sapiens',autor:'Yuval Noah Harari',categoria:'História',ano:'2011',descricao:'Breve história da humanidade.'},
+    {titulo:'O Pequeno Príncipe',autor:'Antoine de Saint-Exupéry',categoria:'Fábula',ano:'1943',descricao:'Fábula universal.'},
+    {titulo:'Cem Anos de Solidão',autor:'Gabriel García Márquez',categoria:'Romance',ano:'1967',descricao:'Saga dos Buendía.'},
+    {titulo:'A Revolução dos Bichos',autor:'George Orwell',categoria:'Fábula',ano:'1945',descricao:'Alegoria política.'},
+    {titulo:'Crime e Castigo',autor:'Fiodor Dostoiévski',categoria:'Romance',ano:'1866',descricao:'A história de Raskólnikov.'},
+    {titulo:'1984',autor:'George Orwell',categoria:'Ficção Científica',ano:'1949',descricao:'Distopia totalitária.'},
+    {titulo:'Admirável Mundo Novo',autor:'Aldous Huxley',categoria:'Ficção Científica',ano:'1932',descricao:'Futuro onde tudo é programado.'},
+    {titulo:'O Hobbit',autor:'J.R.R. Tolkien',categoria:'Fantasia',ano:'1937',descricao:'A aventura de Bilbo Bolseiro.'},
+    {titulo:'Memórias Póstumas de Brás Cubas',autor:'Machado de Assis',categoria:'Literatura Brasileira',ano:'1881',descricao:'Narrado por um defunto autor.'},
+  ];
+  saveBooks(livros.map(l=>({id:gid(),...l,capa:'',status:'disponivel',emprestadoPara:null,dataReserva:null,prazoRetirada:null,dataEmprestimo:null,dataDevolucao:null,criadoEm:new Date().toISOString()})));
+}
+
+// ===================== UTILS =====================
+function fmtDate(iso){if(!iso)return '—';return new Intl.DateTimeFormat('pt-BR').format(new Date(iso));}
+function statusBadge(s){const m={disponivel:'<span class="badge badge-green">Disponível</span>',reservado:'<span class="badge badge-orange">Reservado</span>',emprestado:'<span class="badge badge-red">Emprestado</span>'};return m[s]||`<span class="badge badge-gray">${s}</span>`;}
+function showToast(msg,tipo='info',dur=4000){
+  let c=document.getElementById('toast-container');
+  const icons={success:'✓',error:'✕',info:'ℹ',warning:'⚠'};
+  const t=document.createElement('div');t.className=`toast toast-${tipo}`;
+  t.innerHTML=`<span>${icons[tipo]}</span>${msg}`;c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(20px)';t.style.transition='all .3s';setTimeout(()=>t.remove(),310);},dur);
+}
+function closeModal(){const m=document.getElementById('active-modal');if(m)m.remove();}
+function openModal(html,onMount){
+  closeModal();
+  const ov=document.createElement('div');ov.className='modal-overlay';ov.id='active-modal';
+  ov.innerHTML=`<div class="modal">${html}</div>`;
+  ov.addEventListener('click',e=>{if(e.target===ov)closeModal();});
+  document.body.appendChild(ov);
+  if(onMount)onMount(ov);
+}
+function confirmDlg(msg,cb){
+  openModal(`
+    <div class="modal-header"><span class="modal-title">⚠️ Confirmar</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <p style="color:var(--cinza-escuro);margin-bottom:22px">${msg}</p>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-danger btn-sm" id="conf-ok">Confirmar</button>
+    </div>`,
+    ov=>{ ov.querySelector('#conf-ok').onclick=()=>{closeModal();cb();}; });
+}
+function emptyState(icon,msg){return `<div class="empty-state"><div class="empty-icon">${icon}</div><h3>${msg}</h3></div>`;}
+
+// ===================== NAVBAR =====================
+function renderNavbar(u){
+  document.getElementById('navbar').innerHTML=`
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-logo">📚</div>
+        <div><span class="brand-name">Biblioteca Digital</span><span class="brand-sub">Pública Municipal</span></div>
+      </a>
+      <span class="admin-badge" style="margin-left:16px">⚙️ Painel Admin</span>
+      <div class="nav-auth">
+        <a href="conta.html" class="nav-user">
+          <div class="user-av">${u.nome.charAt(0).toUpperCase()}</div>
+          <span class="user-nm">${u.nome.split(' ')[0]}</span>
+        </a>
+        <a href="index.html" class="btn btn-ghost btn-sm">Início</a>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">Sair</button>
+      </div>
+    </div>`;
+  document.getElementById('logout-btn').onclick=()=>{localStorage.removeItem(K.CU);window.location.href='index.html';};
+}
+function renderFooter(){
+  const f=document.getElementById('footer');if(!f)return;
+  f.innerHTML=`<div class="footer-simple"><span>© ${new Date().getFullYear()} Biblioteca Digital Pública Municipal — Painel de Administração</span></div>`;
+}
+
+// ===================== NAVIGATION =====================
+function gotoSec(id){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));
+  const sec=document.getElementById(id); if(sec)sec.classList.add('active');
+  const lnk=document.querySelector(`.sidebar-nav a[data-sec="${id}"]`); if(lnk)lnk.classList.add('active');
+  // render on demand
+  if(id==='sec-dash') renderDash();
+  if(id==='sec-reservas') renderReservas();
+  if(id==='sec-emprestimos') renderEmprestimos();
+  if(id==='sec-livros') renderLivrosAdmin();
+  if(id==='sec-usuarios') renderUsuarios();
+  if(id==='sec-presencial') popularSelects();
+}
+document.querySelectorAll('.sidebar-nav a[data-sec]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();gotoSec(a.dataset.sec);});
+});
+
+// ===================== DASHBOARD =====================
+function renderDash(){
+  const books=getBooks(),users=getUsers();
+  document.getElementById('d-livros').textContent=books.length;
+  document.getElementById('d-users').textContent=users.filter(u=>u.tipo==='user').length;
+  document.getElementById('d-emp').textContent=books.filter(b=>b.status==='emprestado').length;
+  document.getElementById('d-res').textContent=books.filter(b=>b.status==='reservado').length;
+  const resumo=document.getElementById('dash-resumo');
+  const res=books.filter(b=>b.status==='reservado').slice(0,3);
+  const emp=books.filter(b=>b.status==='emprestado').slice(0,3);
+  resumo.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <p style="font-weight:600;color:var(--azul);margin-bottom:12px;font-size:.9rem">🔖 Últimas reservas</p>
+        ${res.length?res.map(b=>{const u=getUserById(b.emprestadoPara);return `<div style="padding:8px 0;border-bottom:1px solid var(--cinza-borda);font-size:.84rem"><strong>${b.titulo}</strong><br><span style="color:var(--cinza-texto)">${u?u.nome:'—'} · até ${fmtDate(b.prazoRetirada)}</span></div>`;}).join(''):emptyState('📭','Nenhuma reserva')}
+      </div>
+      <div>
+        <p style="font-weight:600;color:var(--azul);margin-bottom:12px;font-size:.9rem">📖 Empréstimos recentes</p>
+        ${emp.length?emp.map(b=>{const u=b.emprestadoPara==='externo'?null:getUserById(b.emprestadoPara);const ext=b.emprestadoPara==='externo'?getExtLoanByLivro(b.id):null;return `<div style="padding:8px 0;border-bottom:1px solid var(--cinza-borda);font-size:.84rem"><strong>${b.titulo}</strong><br><span style="color:var(--cinza-texto)">${u?u.nome:ext?ext.nomePessoa:'—'} · devolução ${fmtDate(b.dataDevolucao)}</span></div>`;}).join(''):emptyState('📚','Nenhum empréstimo')}
+      </div>
+    </div>`;
+}
+
+// ===================== RESERVAS =====================
+function renderReservas(){
+  const cont=document.getElementById('cont-reservas');
+  const reservados=getBooks().filter(b=>b.status==='reservado');
+  if(!reservados.length){cont.innerHTML=emptyState('📭','Nenhuma reserva pendente');return;}
+  cont.innerHTML=`<div class="table-wrap"><table>
+    <thead><tr><th>Livro</th><th>Usuário</th><th>Data Reserva</th><th>Prazo Retirada</th><th>Ações</th></tr></thead>
+    <tbody>${reservados.map(b=>{
+      const u=getUserById(b.emprestadoPara);
+      return `<tr>
+        <td><strong>${b.titulo}</strong><br><span style="color:var(--cinza-texto);font-size:.78rem">${b.autor}</span></td>
+        <td>${u?`<strong>${u.nome}</strong><br><span style="color:var(--cinza-texto);font-size:.78rem">${u.email}</span>`:'—'}</td>
+        <td>${fmtDate(b.dataReserva)}</td>
+        <td><strong>${fmtDate(b.prazoRetirada)}</strong></td>
+        <td>
+          <div class="flex-btns">
+            <button class="btn btn-success btn-xs" onclick="confirmarRetirada('${b.id}')">✓ Confirmar Retirada</button>
+            <button class="btn btn-danger btn-xs" onclick="cancelarReserva('${b.id}')">✕ Cancelar</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
+function confirmarRetirada(id){
+  confirmDlg('Confirmar retirada do livro? Isso iniciará o empréstimo de 7 dias.',()=>{
+    const hoje=new Date(),devol=new Date(hoje);devol.setDate(devol.getDate()+7);
+    updateBook(id,{status:'emprestado',dataEmprestimo:hoje.toISOString(),dataDevolucao:devol.toISOString(),prazoRetirada:null,dataReserva:null});
+    showToast('✅ Retirada confirmada! Empréstimo de 7 dias iniciado.','success');
+    refreshAll();
+  });
+}
+function cancelarReserva(id){
+  confirmDlg('Cancelar esta reserva?',()=>{
+    updateBook(id,{status:'disponivel',emprestadoPara:null,dataReserva:null,prazoRetirada:null});
+    showToast('Reserva cancelada.','info');
+    refreshAll();
+  });
+}
+
+// ===================== EMPRÉSTIMOS =====================
+function renderEmprestimos(){
+  const cont=document.getElementById('cont-emprestimos');
+  const emprestados=getBooks().filter(b=>b.status==='emprestado');
+  if(!emprestados.length){cont.innerHTML=emptyState('📚','Nenhum empréstimo ativo');return;}
+  cont.innerHTML=`<div class="table-wrap"><table>
+    <thead><tr><th>Livro</th><th>Usuário / Pessoa</th><th>Data Empréstimo</th><th>Devolução</th><th>Tipo</th><th>Ação</th></tr></thead>
+    <tbody>${emprestados.map(b=>{
+      let uHtml='',tipoHtml='';
+      if(b.emprestadoPara==='externo'){
+        const ext=getExtLoanByLivro(b.id);
+        uHtml=ext?`<strong>${ext.nomePessoa}</strong><br><span style="font-size:.76rem;color:var(--cinza-texto)">${ext.documento||'Sem doc.'}</span>`:'Externo';
+        tipoHtml='<span class="badge badge-purple">Externo</span>';
+      } else {
+        const u=getUserById(b.emprestadoPara);
+        uHtml=u?`<strong>${u.nome}</strong><br><span style="font-size:.76rem;color:var(--cinza-texto)">${u.email}</span>`:'—';
+        tipoHtml='<span class="badge badge-blue">Cadastrado</span>';
+      }
+      return `<tr>
+        <td><strong>${b.titulo}</strong><br><span style="color:var(--cinza-texto);font-size:.78rem">${b.autor}</span></td>
+        <td>${uHtml}</td>
+        <td>${fmtDate(b.dataEmprestimo)}</td>
+        <td><strong>${fmtDate(b.dataDevolucao)}</strong></td>
+        <td>${tipoHtml}</td>
+        <td><button class="btn btn-warning btn-xs" onclick="devolver('${b.id}')">↩ Devolver</button></td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
+function devolver(id){
+  confirmDlg('Confirmar devolução deste livro?',()=>{
+    const b=getBookById(id);
+    if(b&&b.emprestadoPara==='externo') removeExtLoan(id);
+    updateBook(id,{status:'disponivel',emprestadoPara:null,dataReserva:null,prazoRetirada:null,dataEmprestimo:null,dataDevolucao:null});
+    showToast('📗 Livro devolvido com sucesso!','success');
+    refreshAll();
+  });
+}
+
+// ===================== EMPRÉSTIMO PRESENCIAL =====================
+let userSelecionado=null;
+
+function switchPresTab(t){
+  const isCad=t==='cad';
+  document.getElementById('pres-cad').classList.toggle('hidden',!isCad);
+  document.getElementById('pres-ext').classList.toggle('hidden',isCad);
+  document.getElementById('tab-cad').classList.toggle('active',isCad);
+  document.getElementById('tab-ext').classList.toggle('active',!isCad);
+}
+
+function popularSelects(){
+  const disp=getBooks().filter(b=>b.status==='disponivel');
+  ['livro-cad','livro-ext'].forEach(id=>{
+    const sel=document.getElementById(id);if(!sel)return;
+    sel.innerHTML='<option value="">Selecione um livro disponível...</option>';
+    disp.forEach(b=>{const o=document.createElement('option');o.value=b.id;o.textContent=`${b.titulo} — ${b.autor}`;sel.appendChild(o);});
+  });
+}
+
+function buscarUser(){
+  const q=document.getElementById('busca-user').value.toLowerCase();
+  const cont=document.getElementById('user-results');
+  if(!q){cont.innerHTML='';return;}
+  const matches=getUsers().filter(u=>u.tipo==='user'&&(u.nome.toLowerCase().includes(q)||u.email.toLowerCase().includes(q))).slice(0,5);
+  cont.innerHTML=matches.map(u=>`<div class="user-result" onclick="selecionarUser('${u.id}')"><strong>${u.nome}</strong> <span style="color:var(--cinza-texto);font-size:.82rem">${u.email}</span></div>`).join('');
+  if(!matches.length) cont.innerHTML=`<p style="color:var(--cinza-texto);font-size:.84rem;padding:8px">Nenhum usuário encontrado.</p>`;
+}
+
+function selecionarUser(id){
+  userSelecionado=getUserById(id);
+  document.getElementById('user-results').innerHTML='';
+  document.getElementById('busca-user').value='';
+  document.getElementById('user-sel').innerHTML=`<div class="alert alert-success">✅ Usuário selecionado: <strong>${userSelecionado.nome}</strong> (${userSelecionado.email})</div>`;
+}
+
+function emprestarCadastrado(){
+  if(!userSelecionado){showToast('Selecione um usuário primeiro.','error');return;}
+  const livroId=document.getElementById('livro-cad').value;
+  if(!livroId){showToast('Selecione um livro.','error');return;}
+  const hoje=new Date(),devol=new Date(hoje);devol.setDate(devol.getDate()+7);
+  updateBook(livroId,{status:'emprestado',emprestadoPara:userSelecionado.id,dataEmprestimo:hoje.toISOString(),dataDevolucao:devol.toISOString(),dataReserva:null,prazoRetirada:null});
+  showToast(`✅ Empréstimo registrado para ${userSelecionado.nome}! Devolução: ${fmtDate(devol.toISOString())}`, 'success',5000);
+  userSelecionado=null;
+  document.getElementById('user-sel').innerHTML='';
+  document.getElementById('livro-cad').value='';
+  popularSelects();refreshAll();
+}
+
+function emprestarExterno(){
+  const nome=document.getElementById('nome-ext').value.trim();
+  const doc=document.getElementById('doc-ext').value.trim();
+  const livroId=document.getElementById('livro-ext').value;
+  if(!nome){showToast('Informe o nome da pessoa.','error');return;}
+  if(!livroId){showToast('Selecione um livro.','error');return;}
+  const hoje=new Date(),devol=new Date(hoje);devol.setDate(devol.getDate()+7);
+  const loan={id:gid(),nomePessoa:nome,documento:doc,livroId,dataEmprestimo:hoje.toISOString(),dataDevolucao:devol.toISOString(),tipo:'externo'};
+  const loans=getExtLoans();loans.push(loan);saveExtLoans(loans);
+  updateBook(livroId,{status:'emprestado',emprestadoPara:'externo',dataEmprestimo:hoje.toISOString(),dataDevolucao:devol.toISOString(),dataReserva:null,prazoRetirada:null});
+  showToast(`✅ Empréstimo externo registrado para ${nome}! Devolução: ${fmtDate(devol.toISOString())}`, 'success',5000);
+  document.getElementById('nome-ext').value='';
+  document.getElementById('doc-ext').value='';
+  document.getElementById('livro-ext').value='';
+  popularSelects();refreshAll();
+}
+
+// ===================== LIVROS ADMIN =====================
+function renderLivrosAdmin(){
+  const cont=document.getElementById('cont-livros');
+  const books=getBooks();
+  if(!books.length){cont.innerHTML=emptyState('📚','Nenhum livro cadastrado');return;}
+  cont.innerHTML=`<div class="livros-admin-grid">${books.map(b=>`
+    <div class="livro-admin-card">
+      <div class="livro-mini-capa">${b.capa?`<img src="${b.capa}" alt="" onerror="this.parentElement.innerHTML='📚'">`:'📚'}</div>
+      <div class="livro-mini-info">
+        <h4>${b.titulo}</h4>
+        <p>${b.autor} · ${b.ano||'—'} · ${b.categoria}</p>
+        <div style="margin-bottom:8px">${statusBadge(b.status)}</div>
+        <div class="livro-mini-btns">
+          <button class="btn btn-outline btn-xs" onclick="editarLivro('${b.id}')">✏️ Editar</button>
+          <button class="btn btn-danger btn-xs" onclick="deletarLivro('${b.id}')">🗑️</button>
+          ${b.status==='emprestado'?`<button class="btn btn-warning btn-xs" onclick="devolver('${b.id}')">↩ Devolver</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function editarLivro(id){
+  const b=getBookById(id); if(!b)return;
+  openModal(`
+    <div class="modal-header"><span class="modal-title">✏️ Editar Livro</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="edit-form">
+      <div class="form-group"><label class="form-label">Título</label><input class="form-control" name="titulo" value="${escHtml(b.titulo)}" required></div>
+      <div class="form-group"><label class="form-label">Autor</label><input class="form-control" name="autor" value="${escHtml(b.autor)}" required></div>
+      <div class="form-grid" style="gap:12px">
+        <div class="form-group"><label class="form-label">Categoria</label><input class="form-control" name="categoria" value="${escHtml(b.categoria)}"></div>
+        <div class="form-group"><label class="form-label">Ano</label><input class="form-control" name="ano" value="${escHtml(b.ano)}"></div>
+      </div>
+      <div class="form-group"><label class="form-label">URL da Capa</label><input class="form-control" name="capa" value="${escHtml(b.capa)}" placeholder="https://..."></div>
+      <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-control" name="descricao" rows="3">${escHtml(b.descricao)}</textarea></div>
+      <button type="submit" class="btn btn-primary btn-sm" style="width:100%">Salvar Alterações</button>
+    </form>`,
+    ov=>{
+      ov.querySelector('#edit-form').addEventListener('submit',e=>{
+        e.preventDefault();
+        const d=Object.fromEntries(new FormData(e.target));
+        updateBook(id,d);closeModal();
+        showToast('✅ Livro atualizado!','success');
+        renderLivrosAdmin();renderDash();
+      });
+    });
+}
+function escHtml(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function deletarLivro(id){
+  const b=getBookById(id); if(!b)return;
+  confirmDlg(`Excluir permanentemente "<strong>${b.titulo}</strong>"?`,()=>{
+    deleteBookById(id);
+    showToast('Livro removido do acervo.','info');
+    renderLivrosAdmin();renderDash();
+  });
+}
+
+// ===================== CADASTRO LIVRO =====================
+document.getElementById('form-cad-livro').addEventListener('submit',e=>{
+  e.preventDefault();
+  const data=Object.fromEntries(new FormData(e.target));
+  const copias=parseInt(data.copias)||1;
+  for(let i=0;i<copias;i++) createBook(data);
+  e.target.reset();
+  const msg=document.getElementById('cad-msg');
+  msg.className='alert alert-success';
+  msg.textContent=`✅ ${copias} cópia(s) de "${data.titulo}" cadastrada(s) com sucesso!`;
+  msg.classList.remove('hidden');
+  setTimeout(()=>msg.classList.add('hidden'),4000);
+  renderDash();
+});
+
+// ===================== USUÁRIOS =====================
+function renderUsuarios(){
+  const cont=document.getElementById('cont-usuarios');
+  const users=getUsers();
+  const books=getBooks();
+  cont.innerHTML=`<div class="table-wrap"><table>
+    <thead><tr><th>Nome</th><th>E-mail</th><th>Tipo</th><th>Reservas</th><th>Empréstimos</th><th>Cadastro</th></tr></thead>
+    <tbody>${users.map(u=>{
+      const res=books.filter(b=>b.status==='reservado'&&b.emprestadoPara===u.id).length;
+      const emp=books.filter(b=>b.status==='emprestado'&&b.emprestadoPara===u.id).length;
+      return `<tr>
+        <td><strong>${u.nome}</strong></td>
+        <td>${u.email}</td>
+        <td><span class="badge ${u.tipo==='admin'?'badge-blue':'badge-green'}">${u.tipo==='admin'?'Admin':'Usuário'}</span></td>
+        <td>${res?`<span class="badge badge-orange">${res}</span>`:'-'}</td>
+        <td>${emp?`<span class="badge badge-red">${emp}</span>`:'-'}</td>
+        <td>${u.criadoEm?fmtDate(u.criadoEm):'—'}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
+// ===================== REFRESH ALL =====================
+function refreshAll(){
+  renderDash();
+  const active=document.querySelector('.sec.active');
+  if(active){
+    const id=active.id;
+    if(id==='sec-reservas') renderReservas();
+    if(id==='sec-emprestimos') renderEmprestimos();
+    if(id==='sec-livros') renderLivrosAdmin();
+    if(id==='sec-usuarios') renderUsuarios();
+    if(id==='sec-presencial') popularSelects();
+  }
+}
+
+// ===================== INIT =====================
+seedIfEmpty();
+verificarReservas();
+const cu=getCurrentUser();
+if(!cu||cu.tipo!=='admin'){ window.location.href='login.html'; }
+else{
+  renderNavbar(cu);
+  renderFooter();
+  renderDash();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biblioteca Digital Pública Municipal</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/layout.css">
+  <style>
+    :root {
+      --azul: #1E3A8A;
+      --azul-escuro: #172B6E;
+      --azul-medio: #2D52C7;
+      --azul-claro: #3B82F6;
+      --azul-palido: #DBEAFE;
+      --azul-fundo: #EFF6FF;
+      --branco: #FFFFFF;
+      --cinza-claro: #F8FAFC;
+      --cinza-borda: #E2E8F0;
+      --cinza-texto: #64748B;
+      --cinza-escuro: #334155;
+      --texto: #0F172A;
+      --verde: #059669;
+      --laranja: #D97706;
+      --vermelho: #DC2626;
+      --sombra: 0 4px 16px rgba(30, 58, 138, 0.1);
+      --r: 10px;
+      --fonte-d: 'Playfair Display', Georgia, serif;
+      --fonte-c: 'IBM Plex Sans', system-ui, sans-serif;
+      --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: var(--fonte-c);
+      background: var(--branco);
+      color: var(--texto);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column
+    }
+
+    main {
+      flex: 1
+    }
+
+    a {
+      color: var(--azul);
+      text-decoration: none;
+      transition: color var(--t)
+    }
+
+    a:hover {
+      color: var(--azul-claro)
+    }
+
+    img {
+      max-width: 100%;
+      display: block
+    }
+
+
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: var(--r);
+      font-family: var(--fonte-c);
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all var(--t);
+      text-decoration: none;
+      white-space: nowrap
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .btn-primary {
+      background: var(--azul);
+      color: #fff;
+      border-color: var(--azul)
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--azul-escuro);
+      border-color: var(--azul-escuro);
+      transform: translateY(-1px);
+      box-shadow: var(--sombra);
+      color: #fff
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--azul);
+      border-color: var(--azul)
+    }
+
+    .btn-outline:hover:not(:disabled) {
+      background: var(--azul);
+      color: #fff;
+      transform: translateY(-1px)
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--cinza-escuro);
+      border-color: var(--cinza-borda)
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--cinza-claro);
+      border-color: var(--cinza-escuro)
+    }
+
+    .btn-success {
+      background: var(--verde);
+      color: #fff;
+      border-color: var(--verde)
+    }
+
+    .btn-success:hover:not(:disabled) {
+      background: #047857;
+      border-color: #047857;
+      color: #fff;
+      transform: translateY(-1px)
+    }
+
+    .btn-danger {
+      background: var(--vermelho);
+      color: #fff;
+      border-color: var(--vermelho)
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: #B91C1C;
+      border-color: #B91C1C;
+      color: #fff;
+      transform: translateY(-1px)
+    }
+
+    .btn-warning {
+      background: var(--laranja);
+      color: #fff;
+      border-color: var(--laranja)
+    }
+
+    .btn-warning:hover:not(:disabled) {
+      background: #B45309;
+      color: #fff;
+      transform: translateY(-1px)
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      border-radius: 6px
+    }
+
+    .btn-lg {
+      padding: 14px 32px;
+      font-size: 1rem;
+      border-radius: 14px
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--azul) 0%, var(--azul-medio) 60%, #1D4ED8 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 80px 0 100px;
+      color: #fff
+    }
+
+    .hero-logo {
+      height: 26px;
+      width: auto;
+      object-fit: contain;
+      margin-right: 6px;
+    }
+
+
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--branco);
+      clip-path: ellipse(55% 100% at 50% 100%)
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 500
+    }
+
+    .hero-title {
+      font-family: var(--fonte-d);
+      font-size: 3.2rem;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15)
+    }
+
+    .hero-title span {
+      color: #93C5FD
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      opacity: .88;
+      max-width: 600px;
+      line-height: 1.7
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 8px
+    }
+
+    .btn-hw {
+      background: #fff;
+      color: var(--azul);
+      border: 2px solid #fff;
+      font-weight: 600
+    }
+
+    .btn-hw:hover {
+      background: transparent;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .2)
+    }
+
+    .btn-ho {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, .5)
+    }
+
+    .btn-ho:hover {
+      background: rgba(255, 255, 255, .12);
+      border-color: #fff;
+      color: #fff;
+      transform: translateY(-2px)
+    }
+
+    /* STATS */
+    .stats-section {
+      padding: 56px 0
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 32px 24px;
+      border-radius: 14px;
+      background: var(--azul-fundo);
+      border: 1px solid var(--azul-palido);
+      transition: all var(--t)
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sombra)
+    }
+
+    .stat-icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px
+    }
+
+    .stat-value {
+      font-family: var(--fonte-d);
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--azul);
+      line-height: 1
+    }
+
+    .stat-label {
+      font-size: .9rem;
+      color: var(--cinza-texto);
+      margin-top: 6px;
+      font-weight: 500
+    }
+
+    /* FEATURES */
+    .features-section {
+      padding: 64px 0;
+      background: var(--cinza-claro)
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px
+    }
+
+    .feature-card {
+      background: #fff;
+      padding: 28px;
+      border-radius: 14px;
+      border: 1px solid var(--cinza-borda);
+      transition: all var(--t)
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--sombra);
+      border-color: var(--azul-palido)
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: var(--azul-fundo);
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 16px
+    }
+
+    .feature-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: var(--azul)
+    }
+
+    .feature-desc {
+      font-size: .875rem;
+      color: var(--cinza-texto);
+      line-height: 1.6
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 72px 0;
+      background: var(--azul);
+      color: #fff;
+      text-align: center
+    }
+
+    .cta-title {
+      font-family: var(--fonte-d);
+      font-size: 2.2rem;
+      margin-bottom: 12px
+    }
+
+    .cta-subtitle {
+      opacity: .85;
+      font-size: 1rem;
+      margin-bottom: 28px
+    }
+
+    .cta-btns {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+      margin-bottom: 32px;
+      text-align: center
+    }
+
+    .section-title {
+      font-family: var(--fonte-d);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--azul);
+      margin-bottom: 8px
+    }
+
+    .section-subtitle {
+      color: var(--cinza-texto);
+      font-size: 1rem
+    }
+
+    /* TOAST */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .toast {
+      padding: 12px 18px;
+      border-radius: var(--r);
+      box-shadow: 0 10px 40px rgba(30, 58, 138, .14);
+      font-size: .875rem;
+      font-weight: 500;
+      min-width: 260px;
+      max-width: 380px;
+      animation: toastIn .3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .toast-success {
+      background: var(--verde);
+      color: #fff
+    }
+
+    .toast-error {
+      background: var(--vermelho);
+      color: #fff
+    }
+
+    .toast-info {
+      background: var(--azul);
+      color: #fff
+    }
+
+    .toast-warning {
+      background: var(--laranja);
+      color: #fff
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0)
+      }
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, .55);
+      backdrop-filter: blur(3px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px
+    }
+
+    .modal {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 520px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(30, 58, 138, .14);
+      animation: modalIn .22s ease;
+      max-height: 90vh;
+      overflow-y: auto
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px
+    }
+
+    .modal-title {
+      font-family: var(--fonte-d);
+      font-size: 1.3rem;
+      color: var(--azul)
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--cinza-claro);
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--cinza-texto);
+      transition: all var(--t)
+    }
+
+    .modal-close:hover {
+      background: var(--cinza-borda);
+      color: var(--texto)
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(-16px) scale(.97)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+
+    /* ÍCONES DOS BOTÕES */
+    .btn i {
+      margin-right: 6px;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 600
+    }
+
+    .badge-green {
+      background: #D1FAE5;
+      color: #065F46
+    }
+
+    .badge-blue {
+      background: var(--azul-palido);
+      color: var(--azul)
+    }
+
+    .badge-orange {
+      background: #FEF3C7;
+      color: #92400E
+    }
+
+    .badge-red {
+      background: #FEE2E2;
+      color: #991B1B
+    }
+
+    .badge-gray {
+      background: #F1F5F9;
+      color: #475569
+    }
+
+    /* FORMS */
+    .form-group {
+      margin-bottom: 18px
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--cinza-escuro)
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--cinza-borda);
+      border-radius: var(--r);
+      font-family: var(--fonte-c);
+      font-size: .9rem;
+      color: var(--texto);
+      background: #fff;
+      transition: border-color var(--t), box-shadow var(--t);
+      outline: none
+    }
+
+    .form-control:focus {
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, .15)
+    }
+
+    .form-control::placeholder {
+      color: #94A3B8
+    }
+
+    select.form-control {
+      cursor: pointer
+    }
+
+    .stat-icon i,
+    .feature-icon i,
+    .nav-logo i,
+    .footer-logo i,
+    .hero-badge i {
+      font-size: 1.4rem;
+    }
+
+    .btn i {
+      margin-right: 6px;
+      font-size: 1rem;
+    }
+
+    /* ALERT */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--r);
+      margin-bottom: 16px;
+      font-size: .875rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px
+    }
+
+    .alert-success {
+      background: #D1FAE5;
+      color: #065F46;
+      border: 1px solid #A7F3D0
+    }
+
+    .alert-error {
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FECACA
+    }
+
+    .alert-info {
+      background: var(--azul-palido);
+      color: var(--azul-escuro);
+      border: 1px solid #BFDBFE
+    }
+
+    .alert-warning {
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #FDE68A
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="navbar"></header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <div class="hero-badge">
+            <img src="img/prefeitura.png" alt="Logo Biblioteca Digital" class="hero-logo">
+            Prefeitura Municipal · Cultura & Educação
+          </div>
+          <h1 class="hero-title">Biblioteca Enéas Calvalcante<br><span>Pública Municipal</span></h1>
+          <p class="hero-subtitle">Acesso gratuito ao conhecimento. Explore nosso acervo, reserve livros online e
+            expanda seus horizontes.</p>
+          <div class="hero-actions">
+            <a href="acervo.html" class="btn btn-lg btn-hw"><i class="bi bi-book"></i>
+              Explorar Acervo</a>
+            <a href="login.html" class="btn btn-lg btn-ho" id="hero-login-btn">
+              <i class="bi bi-box-arrow-in-right"></i>
+              Entrar na Conta
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+
+              <i class="bi bi-book"></i>
+
+            </div>
+            <div class="stat-value" id="stat-livros">0</div>
+            <div class="stat-label">Livros no Acervo</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <div class="stat-icon">
+                <i class="bi bi-people"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-usuarios">0</div>
+            <div class="stat-label">Usuários Cadastrados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <div class="stat-icon">
+                <i class="bi bi-journal-bookmark"></i>
+              </div>
+            </div>
+            <div class="stat-value" id="stat-emprestimos">0</div>
+            <div class="stat-label">Empréstimos Ativos</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Como funciona?</h2>
+          <p class="section-subtitle">Um sistema simples, moderno e acessível para toda a comunidade.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <div class="feature-icon">
+                <i class="bi bi-search"></i>
+              </div>
+            </div>
+            <h3 class="feature-title">Explore o Acervo</h3>
+            <p class="feature-desc">Navegue por centenas de títulos, filtre por categoria e encontre o livro perfeito
+              para você.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <div class="feature-icon">
+                <i class="bi bi-bookmark-check"></i>
+              </div>
+            </div>
+            <h3 class="feature-title">Reserve Online</h3>
+            <p class="feature-desc">Reserve seu livro com um clique e tenha 1 dia para comparecer à biblioteca e
+              retirar.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <div class="feature-icon">
+                <i class="bi bi-person-circle"></i>
+              </div>
+            </div>
+            <h3 class="feature-title">Acompanhe sua Conta</h3>
+            <p class="feature-desc">Veja seus livros reservados, emprestados e prazos de devolução em um só lugar.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <div class="feature-icon">
+                <i class="bi bi-building"></i>
+              </div>
+            </div>
+            <h3 class="feature-title">Acesso Gratuito</h3>
+            <p class="feature-desc">Serviço 100% gratuito para todos os cidadãos do município.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <div class="feature-icon">
+                <i class="bi bi-clock"></i>
+              </div>
+            </div>
+            <h3 class="feature-title">Disponível 24h</h3>
+            <p class="feature-desc">Consulte o acervo e faça reservas a qualquer hora, de qualquer dispositivo.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <div class="feature-icon">
+                <i class="bi bi-shield-check"></i>
+              </div>
+            </div>
+            <h3 class="feature-title">Seguro e Confiável</h3>
+            <p class="feature-desc">Sistema gerenciado pela Prefeitura Municipal com tecnologia moderna.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2 class="cta-title">Comece a explorar agora</h2>
+        <p class="cta-subtitle">Cadastre-se gratuitamente e tenha acesso a todo o nosso acervo.</p>
+        <div class="cta-btns">
+          <a href="login.html" class="btn btn-lg btn-hw">Criar Conta Gratuita</a>
+          <a href="acervo.html" class="btn btn-lg btn-ho">Ver Acervo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer"></footer>
+  <div id="toast-container"></div>
+  <script src="js/layout.js"></script>
+  <script>
+    // ===================== STORAGE =====================
+    const K = { USERS: 'bdp_users', BOOKS: 'bdp_books', CU: 'bdp_currentUser', EXT: 'bdp_extLoans' };
+    const sg = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+    const ss = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+    const gid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+    function getUsers() { return sg(K.USERS) || []; }
+    function saveUsers(u) { ss(K.USERS, u); }
+    function getUserById(id) { return getUsers().find(u => u.id === id) || null; }
+    function getUserByEmail(e) { return getUsers().find(u => u.email.toLowerCase() === e.toLowerCase()) || null; }
+    function getCurrentUser() { return sg(K.CU); }
+    function setCurrentUser(u) { ss(K.CU, u); }
+    function getBooks() { return sg(K.BOOKS) || []; }
+    function saveBooks(b) { ss(K.BOOKS, b); }
+    function getStats() {
+      const books = getBooks(), users = getUsers();
+      return {
+        totalLivros: books.length,
+        totalUsuarios: users.filter(u => u.tipo === 'user').length,
+        emprestimosAtivos: books.filter(b => b.status === 'emprestado').length,
+        reservasPendentes: books.filter(b => b.status === 'reservado').length,
+      };
+    }
+    function verificarReservas() {
+      const agora = new Date(), books = getBooks(); let ok = false;
+      books.forEach(b => { if (b.status === 'reservado' && b.prazoRetirada && agora > new Date(b.prazoRetirada)) { b.status = 'disponivel'; b.emprestadoPara = null; b.dataReserva = null; b.prazoRetirada = null; ok = true; } });
+      if (ok) saveBooks(books);
+    }
+    function seedIfEmpty() {
+      if (getBooks().length > 0) return;
+      if (!getUserByEmail('admin@biblioteca.gov.br')) {
+        const u = { id: gid(), nome: 'Administrador', email: 'admin@biblioteca.gov.br', senha: 'admin123', tipo: 'admin', criadoEm: new Date().toISOString() };
+        saveUsers([u]);
+      }
+      const livros = [
+        { titulo: 'Dom Casmurro', autor: 'Machado de Assis', categoria: 'Literatura Brasileira', ano: '1899', descricao: 'Um clássico sobre amor, ciúme e traição.' },
+        { titulo: 'O Cortiço', autor: 'Aluísio Azevedo', categoria: 'Literatura Brasileira', ano: '1890', descricao: 'Romance naturalista sobre os cortiços do Rio de Janeiro.' },
+        { titulo: 'Iracema', autor: 'José de Alencar', categoria: 'Literatura Brasileira', ano: '1865', descricao: 'Romance indianista de José de Alencar.' },
+        { titulo: 'Grande Sertão: Veredas', autor: 'João Guimarães Rosa', categoria: 'Literatura Brasileira', ano: '1956', descricao: 'Obra-prima da literatura brasileira do século XX.' },
+        { titulo: 'Sagarana', autor: 'João Guimarães Rosa', categoria: 'Contos', ano: '1946', descricao: 'Contos ambientados no sertão mineiro.' },
+        { titulo: 'O Senhor dos Anéis', autor: 'J.R.R. Tolkien', categoria: 'Fantasia', ano: '1954', descricao: 'A épica jornada de Frodo para destruir o Um Anel.' },
+        { titulo: 'Sapiens', autor: 'Yuval Noah Harari', categoria: 'História', ano: '2011', descricao: 'Uma breve história da humanidade.' },
+        { titulo: 'O Pequeno Príncipe', autor: 'Antoine de Saint-Exupéry', categoria: 'Fábula', ano: '1943', descricao: 'Um pequeno príncipe viaja por diferentes planetas.' },
+        { titulo: 'Cem Anos de Solidão', autor: 'Gabriel García Márquez', categoria: 'Romance', ano: '1967', descricao: 'A saga da família Buendía em Macondo.' },
+        { titulo: 'A Revolução dos Bichos', autor: 'George Orwell', categoria: 'Fábula', ano: '1945', descricao: 'Alegoria política sobre totalitarismo.' },
+        { titulo: 'Crime e Castigo', autor: 'Fiodor Dostoiévski', categoria: 'Romance', ano: '1866', descricao: 'A história de Raskólnikov e seu crime.' },
+        { titulo: '1984', autor: 'George Orwell', categoria: 'Ficção Científica', ano: '1949', descricao: 'Uma distopia sobre um regime totalitário.' },
+        { titulo: 'Admirável Mundo Novo', autor: 'Aldous Huxley', categoria: 'Ficção Científica', ano: '1932', descricao: 'Um futuro onde a felicidade é obrigatória.' },
+        { titulo: 'O Hobbit', autor: 'J.R.R. Tolkien', categoria: 'Fantasia', ano: '1937', descricao: 'A aventura de Bilbo Bolseiro.' },
+        { titulo: 'Memórias Póstumas de Brás Cubas', autor: 'Machado de Assis', categoria: 'Literatura Brasileira', ano: '1881', descricao: 'Narrado por um defunto autor.' },
+      ];
+      const books = livros.map(l => ({ id: gid(), ...l, capa: '', status: 'disponivel', emprestadoPara: null, dataReserva: null, prazoRetirada: null, dataEmprestimo: null, dataDevolucao: null, criadoEm: new Date().toISOString() }));
+      saveBooks(books);
+    }
+
+    // ===================== UI =====================
+    function showToast(msg, tipo = 'info', dur = 3500) {
+      let c = document.getElementById('toast-container');
+      if (!c) { c = document.createElement('div'); c.id = 'toast-container'; document.body.appendChild(c); }
+      const icons = { success: '✓', error: '✕', info: 'ℹ', warning: '⚠' };
+      const t = document.createElement('div');
+      t.className = `toast toast-${tipo}`;
+      t.innerHTML = `<span>${icons[tipo] || 'ℹ'}</span>${msg}`;
+      c.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(20px)'; t.style.transition = 'all .3s ease'; setTimeout(() => t.remove(), 310); }, dur);
+    }
+    function animateCounter(el, target, dur = 800) {
+      let s = 0; const step = target / (dur / 16);
+      const tick = () => { s = Math.min(s + step, target); el.textContent = Math.round(s); if (s < target) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+    }
+    function fmtDate(iso) { if (!iso) return '—'; return new Intl.DateTimeFormat('pt-BR').format(new Date(iso)); }
+    function controlarHeroLogin() {
+      const btn = document.getElementById('hero-login-btn');
+      const user = getCurrentUser();
+
+      if (!btn) return;
+
+      if (user) {
+        btn.style.display = 'none'; // Esconde se estiver logado
+      } else {
+        btn.style.display = 'inline-flex'; // Mostra se não estiver logado
+      }
+    }
+
+    // ===================== INIT =====================
+    seedIfEmpty();
+    verificarReservas();
+    renderNavbar('home');
+    renderFooter();
+    controlarHeroLogin();
+
+    const stats = getStats();
+    animateCounter(document.getElementById('stat-livros'), stats.totalLivros);
+    animateCounter(document.getElementById('stat-usuarios'), stats.totalUsuarios);
+    animateCounter(document.getElementById('stat-emprestimos'), stats.emprestimosAtivos);
+  </script>
+</body>
+
+</html>
