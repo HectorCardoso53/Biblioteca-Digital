@@ -1,0 +1,223 @@
+/* =====================================================
+   HERO
+===================================================== */
+
+.qs-hero {
+  background: linear-gradient(135deg, var(--azul), var(--azul-medio));
+  color: #fff;
+  padding: 72px 0;
+  text-align: center;
+}
+
+.qs-hero h1 {
+  font-family: var(--fonte-d);
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+
+.qs-hero p {
+  opacity: .85;
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+.qs-sec {
+  padding: 64px 0;
+}
+
+.qs-sec-alt {
+  padding: 64px 0;
+  background: var(--cinza-claro);
+}
+
+
+/* =====================================================
+   GRID PRINCIPAL
+===================================================== */
+
+.qs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.qs-grid.rev {
+  direction: rtl;
+}
+
+.qs-grid.rev > * {
+  direction: ltr;
+}
+
+
+/* =====================================================
+   TEXTO
+===================================================== */
+
+.qs-text h2 {
+  font-family: var(--fonte-d);
+  font-size: 1.9rem;
+  color: var(--azul);
+  margin-bottom: 16px;
+}
+
+.qs-text p {
+  color: var(--cinza-texto);
+  line-height: 1.8;
+  margin-bottom: 14px;
+  font-size: .95rem;
+}
+
+
+/* =====================================================
+   VISUAL
+===================================================== */
+
+.qs-visual {
+  background: var(--azul-fundo);
+  border-radius: 24px;
+  padding: 48px;
+  text-align: center;
+  font-size: 6rem;
+  border: 1px solid var(--azul-palido);
+}
+
+
+/* =====================================================
+   VALUES
+===================================================== */
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.val-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  border: 1px solid var(--cinza-borda);
+  text-align: center;
+  transition: all var(--t);
+}
+
+.val-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sombra);
+  border-color: var(--azul-palido);
+}
+
+.val-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.val-title {
+  font-weight: 600;
+  color: var(--azul);
+  margin-bottom: 6px;
+}
+
+.val-desc {
+  font-size: .84rem;
+  color: var(--cinza-texto);
+}
+
+
+/* =====================================================
+   STEPS
+===================================================== */
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.step {
+  text-align: center;
+}
+
+.step-num {
+  width: 48px;
+  height: 48px;
+  background: var(--azul);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--fonte-d);
+  font-weight: 700;
+  margin: 0 auto 14px;
+}
+
+
+/* =====================================================
+   CONTACT
+===================================================== */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.contact-card {
+  text-align: center;
+  padding: 28px;
+  border: 1px solid var(--cinza-borda);
+  border-radius: 14px;
+  background: #fff;
+  transition: all var(--t);
+}
+
+.contact-card:hover {
+  box-shadow: var(--sombra);
+  border-color: var(--azul-palido);
+}
+
+.contact-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media (max-width: 1024px) {
+
+  .values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .qs-grid,
+  .values-grid,
+  .steps-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .qs-grid.rev {
+    direction: ltr;
+  }
+
+}

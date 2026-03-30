@@ -1,0 +1,89 @@
+/* ================= ROOT VARIABLES ================= */
+
+:root {
+  --azul: #1E3A8A;
+  --azul-escuro: #172B6E;
+  --azul-medio: #2D52C7;
+  --azul-claro: #3B82F6;
+  --azul-palido: #DBEAFE;
+  --azul-fundo: #EFF6FF;
+
+  --branco: #FFFFFF;
+  --cinza-claro: #F8FAFC;
+  --cinza-borda: #E2E8F0;
+  --cinza-texto: #64748B;
+  --cinza-escuro: #334155;
+  --texto: #0F172A;
+
+  --verde: #059669;
+  --laranja: #D97706;
+  --vermelho: #DC2626;
+
+  --sombra: 0 4px 16px rgba(30, 58, 138, 0.1);
+  --r: 10px;
+
+  --fonte-d: 'Playfair Display', Georgia, serif;
+  --fonte-c: 'IBM Plex Sans', system-ui, sans-serif;
+
+  --t: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ================= RESET GLOBAL ================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* ================= ESTRUTURA BASE ================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--fonte-c);
+  background: var(--branco);
+  color: var(--texto);
+  line-height: 1.6;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1; /* Mantém o footer no final */
+}
+
+
+/* ================= ELEMENTOS GLOBAIS ================= */
+
+a {
+  color: var(--azul);
+  text-decoration: none;
+  transition: color var(--t);
+}
+
+a:hover {
+  color: var(--azul-claro);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+
+/* ================= CONTAINER PADRÃO ================= */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
